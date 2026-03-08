@@ -1,4 +1,4 @@
-package BehaviouralPatterns.MementoPattern.GoodCode;
+package BehaviouralPatterns.OLD.MementoPattern.GoodCode;
 
 
 public class TextEditorMain {
