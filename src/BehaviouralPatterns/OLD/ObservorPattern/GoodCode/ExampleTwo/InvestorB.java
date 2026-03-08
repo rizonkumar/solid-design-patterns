@@ -1,6 +1,6 @@
 // The InvestorB class implements the Observer interface and receives stock price updates.
 
-package BehaviouralPatterns.ObservorPattern.GoodCode.ExampleTwo;
+package BehaviouralPatterns.OLD.ObservorPattern.GoodCode.ExampleTwo;
 
 public class InvestorB implements Observer {
 

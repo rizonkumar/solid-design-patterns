@@ -1,5 +1,5 @@
 package SOLID.LSP.GoodCode;
 
-public interface Writeable {
+public interface Writable {
     void write();
 }

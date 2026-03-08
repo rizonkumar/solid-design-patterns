@@ -10,11 +10,11 @@ public class Main {
         ReadableFile readableFile = new ReadOnlyFile();
         readableFile.read();
 
-        WritableFile writeableFile = new WritableFile();
-        writeableFile.read();
-        writeableFile.write();
+        WritableFile writableFile = new WritableFile();
+        writableFile.read();
+        writableFile.write();
 
         readAnyFile(readableFile);
-        readAnyFile(writeableFile);
+        readAnyFile(writableFile);
     }
 }

@@ -1,4 +1,4 @@
-package BehaviouralPatterns.MementoPattern.BadCode;
+package BehaviouralPatterns.OLD.MementoPattern.BadCode;
 
 public class TextEditorMain {
     public static void main(String[] args) {

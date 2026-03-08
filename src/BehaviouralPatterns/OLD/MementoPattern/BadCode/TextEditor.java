@@ -1,4 +1,4 @@
-package BehaviouralPatterns.MementoPattern.BadCode;
+package BehaviouralPatterns.OLD.MementoPattern.BadCode;
 
 /**
  * A text editor where the user can undo changes, such as text addition, deletion or formatting. The editor stores

@@ -13,7 +13,7 @@ public interface Readable {
     void read();
 }
 
-public interface Writeable {
+public interface Writable {
     void write();
 }
 
@@ -28,7 +28,7 @@ public class ReadOnlyFile extends ReadableFile {
     // Inherits only reading behavior
 }
 
-public class WritableFile extends ReadableFile implements Writeable {
+public class WritableFile extends ReadableFile implements Writable {
     @Override
     public void write() {
         System.out.println("Writing to a file...");
@@ -44,15 +44,15 @@ public class Main {
         ReadableFile readableFile = new ReadOnlyFile();
         readableFile.read();
 
-        WritableFile writeableFile = new WritableFile();
-        writeableFile.read();
-        writeableFile.write();
+        WritableFile writableFile = new WritableFile();
+        writableFile.read();
+        writableFile.write();
 
         readAnyFile(readableFile);
-        readAnyFile(writeableFile);
+        readAnyFile(writableFile);
     }
 }
-````
+```
 
 ---
 
@@ -112,7 +112,7 @@ This design **respects LSP** because:
 
 ### Summary
 
-By separating **read** and **write** responsibilities into clear interfaces (`Readable`, `Writeable`) and ensuring subclasses extend functionality **without restricting** parent behavior,
+By separating **read** and **write** responsibilities into clear interfaces (`Readable`, `Writable`) and ensuring subclasses extend functionality **without restricting** parent behavior,
 this code follows the **Liskov Substitution Principle** perfectly.
 
 **Every subclass can stand in for its parent without surprises or errors.**

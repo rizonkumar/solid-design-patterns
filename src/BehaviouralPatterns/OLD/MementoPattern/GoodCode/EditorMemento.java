@@ -1,4 +1,4 @@
-package BehaviouralPatterns.MementoPattern.GoodCode;
+package BehaviouralPatterns.OLD.MementoPattern.GoodCode;
 
 // Mementor Class: Stores the internal state of the Text Editor
 public class EditorMemento {

@@ -1,4 +1,4 @@
-package BehaviouralPatterns.ObservorPattern.BadCode;
+package BehaviouralPatterns.OLD.ObservorPattern.BadCode;
 
 class DisplayDevice {
     public void showTemp(float temp) {
