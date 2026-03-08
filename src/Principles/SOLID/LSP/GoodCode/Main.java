@@ -1,11 +1,7 @@
 package SOLID.LSP.GoodCode;
 
 public class Main {
-
-    public static void readAnyFile(ReadableFile file) {
-        file.read();
-    }
-
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         ReadableFile readableFile = new ReadOnlyFile();
         readableFile.read();
@@ -16,5 +12,9 @@ public class Main {
 
         readAnyFile(readableFile);
         readAnyFile(writableFile);
+    }
+
+    public static void readAnyFile(ReadableFile file) {
+        file.read();
     }
 }

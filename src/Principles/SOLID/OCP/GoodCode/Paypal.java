@@ -4,6 +4,6 @@ public class Paypal implements PaymentMethod{
 
     @Override
     public void pay(double amount) {
-        System.out.println("Making payment via paypal" + amount);
+        System.out.println("Making payment via paypal: " + amount);
     }
 }

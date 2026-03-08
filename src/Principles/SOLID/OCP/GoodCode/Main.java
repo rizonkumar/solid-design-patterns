@@ -1,6 +1,7 @@
 package SOLID.OCP.GoodCode;
 
 public class Main {
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         PaymentProcessor processor = new PaymentProcessor();
         PaymentMethod creditCard = new CreditCard();

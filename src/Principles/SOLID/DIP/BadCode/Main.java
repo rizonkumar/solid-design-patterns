@@ -5,6 +5,7 @@ package SOLID.DIP.BadCode;
  * Adding a new channel would require modifying NotificationService.
  */
 public class Main {
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         NotificationService service = new NotificationService();
         service.notifyByEmail("Your order has been shipped");

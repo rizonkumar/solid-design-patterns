@@ -5,6 +5,7 @@ package SOLID.ISP.GoodCode;
  * SimplerPrinter only implements Printer; MultiPurposeMachine implements all three.
  */
 public class Main {
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         Document doc = new Document();
 
