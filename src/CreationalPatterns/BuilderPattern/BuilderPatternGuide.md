@@ -10,11 +10,46 @@ The **Builder Pattern** is a creational design pattern that separates the constr
 
 ### In Simpler Terms (The Chef Analogy)
 
-Imagine ordering a custom burger. You choose the bun, patty, toppings, and sauces. The chef follows your instructions step-by-step. This is what the Builder Pattern does—it specification of parts one at a time, giving you flexibility and control without needing a massive, confusing constructor.
+Imagine ordering a custom burger. You choose the bun, patty, toppings, and sauces. The chef follows your instructions step-by-step. This is what the Builder Pattern does—it allows specification of parts one at a time, giving you flexibility and control without needing a massive, confusing constructor.
 
 ---
 
-## 2. Understanding the Problem: "Telescoping Constructors"
+## 2. Class Diagram
+
+The following diagram illustrates the relationship between the product and its internal builder.
+
+```mermaid
+classDiagram
+    class BurgerMeal {
+        -String bunType
+        -String patty
+        -boolean hasCheese
+        -List~String~ toppings
+        -String side
+        -BurgerMeal(builder: BurgerBuilder)
+        +toString() String
+    }
+
+    class BurgerBuilder {
+        -String bunType
+        -String patty
+        -boolean hasCheese
+        -List~String~ toppings
+        -String side
+        +BurgerBuilder(bunType: String, patty: String)
+        +withCheese(hasCheese: boolean) BurgerBuilder
+        +withSide(side: String) BurgerBuilder
+        +build() BurgerMeal
+    }
+
+    BurgerMeal +-- BurgerBuilder : static nested
+    BurgerBuilder ..> BurgerMeal : creates
+
+```
+
+---
+
+## 3. Understanding the Problem: "Telescoping Constructors"
 
 When a class has many optional parameters, developers often fall into the **Telescoping Constructor Anti-Pattern**.
 
@@ -28,6 +63,7 @@ class BurgerMeal {
     public BurgerMeal(String bun, String patty, boolean cheese, String side) { ... }
     // This is hard to read, error-prone, and inflexible.
 }
+
 ```
 
 ### Key Issues Identified:
@@ -39,7 +75,7 @@ class BurgerMeal {
 
 ---
 
-## 3. The Solution: Fluent Builder Pattern
+## 4. The Solution: Fluent Builder Pattern
 
 By using a static nested class, we can build the object step-by-step.
 
@@ -97,7 +133,7 @@ class BurgerMeal {
 
 ---
 
-## 4. Why This Is Better
+## 5. Why This Is Better
 
 | Aspect                 | Constructor Approach           | Builder Pattern                     |
 | ---------------------- | ------------------------------ | ----------------------------------- |
@@ -108,7 +144,7 @@ class BurgerMeal {
 
 ---
 
-## 5. When to Use vs. Avoid
+## 6. When to Use vs. Avoid
 
 ### Use When:
 
@@ -123,7 +159,7 @@ class BurgerMeal {
 
 ---
 
-## 6. Real-World Examples
+## 7. Real-World Examples
 
 1. **Lombok's `@Builder`:** A Java library that generates all this boilerplate code automatically with a single annotation.
 2. **Amazon Cart Configuration:** Building a cart item involves many optional steps (Size, Color, Gift Wrap, Delivery Option) that are best handled via a Builder.
