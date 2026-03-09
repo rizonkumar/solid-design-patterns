@@ -4,12 +4,13 @@ Creational, behavioural, and (when added) structural design patterns with **Befo
 
 ## Structure
 
-| Category | Folder | Patterns |
-|----------|--------|----------|
-| **Creational** | [CreationalPatterns/](CreationalPatterns/) | Singleton, Factory, Abstract Factory, Builder |
-| **Behavioural** | [BehaviouralPatterns/](BehaviouralPatterns/) | Memento, Observer |
+| Category        | Folder                                       | Patterns                                      |
+| --------------- | -------------------------------------------- | --------------------------------------------- |
+| **Creational**  | [CreationalPatterns/](CreationalPatterns/)   | Singleton, Factory, Abstract Factory, Builder |
+| **Behavioural** | [BehaviouralPatterns/](BehaviouralPatterns/) | Memento, Observer                             |
 
 Each pattern typically has:
+
 - **Before** (or BadCode) – problem / violation
 - **After** (or GoodCode) – refactored solution
 - A short guide (e.g. `*PatternGuide.md` or `Notes.md`)
