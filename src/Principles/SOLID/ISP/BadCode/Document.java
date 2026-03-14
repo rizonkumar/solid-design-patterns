@@ -1,4 +1,3 @@
 package SOLID.ISP.BadCode;
 
-public class Document  {
-}
+public class Document {}

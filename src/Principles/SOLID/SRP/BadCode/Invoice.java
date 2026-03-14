@@ -1,6 +1,7 @@
 package SOLID.SRP.BadCode;
 
 public class Invoice {
+
     private double amount;
 
     public Invoice(double amount) {

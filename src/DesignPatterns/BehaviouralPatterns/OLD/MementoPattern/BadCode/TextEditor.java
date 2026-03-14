@@ -6,6 +6,7 @@ package DesignPatterns.BehaviouralPatterns.OLD.MementoPattern.BadCode;
  */
 
 public class TextEditor {
+
     private String content;
 
     public void write(String text) {

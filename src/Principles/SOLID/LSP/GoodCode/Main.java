@@ -1,6 +1,7 @@
 package SOLID.LSP.GoodCode;
 
 public class Main {
+
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         ReadableFile readableFile = new ReadOnlyFile();

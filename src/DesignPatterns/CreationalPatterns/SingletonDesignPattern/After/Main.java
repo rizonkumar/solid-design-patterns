@@ -5,6 +5,7 @@ package DesignPatterns.CreationalPatterns.SingletonDesignPattern.After;
  * run and submit counts are shared globally.
  */
 class Main {
+
     public static void main(String[] args) {
         JudgeAnalytics analytics = JudgeAnalytics.getInstance();
 
@@ -14,7 +15,7 @@ class Main {
 
         // Same instance can be obtained anywhere; counts are global.
         JudgeAnalytics same = JudgeAnalytics.getInstance();
-        System.out.println("Total runs: " + same.getRunCount());     // 2
+        System.out.println("Total runs: " + same.getRunCount()); // 2
         System.out.println("Total submits: " + same.getSubmitCount()); // 1
     }
 }

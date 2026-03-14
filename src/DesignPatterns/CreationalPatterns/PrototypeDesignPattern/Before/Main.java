@@ -6,6 +6,7 @@ interface EmailTemplate {
 }
 
 class WelcomeEmail implements EmailTemplate {
+
     private String subject;
     private String content;
 
@@ -13,7 +14,8 @@ class WelcomeEmail implements EmailTemplate {
         // Imagine this constructor involves heavy operations:
         // Loading large HTML/CSS templates, fetching branding from DB, etc.
         this.subject = "Welcome to our platform";
-        this.content = "Welcome to our platform. We are glad to have you on board.";
+        this.content =
+            "Welcome to our platform. We are glad to have you on board.";
     }
 
     @Override
@@ -23,22 +25,35 @@ class WelcomeEmail implements EmailTemplate {
 
     @Override
     public void send(String to) {
-        System.out.println("Sending email to: " + to + "\nSubject: " + subject + "\nContent: " + content + "\n");
+        System.out.println(
+            "Sending email to: " +
+                to +
+                "\nSubject: " +
+                subject +
+                "\nContent: " +
+                content +
+                "\n"
+        );
     }
 }
 
 public class Main {
+
     public static void main(String[] args) {
         // ISSUE 1: Inefficiency
         // Calling 'new' multiple times re-runs the expensive constructor logic every single time.
         WelcomeEmail welcomeEmailPlus = new WelcomeEmail();
-        welcomeEmailPlus.setContent("Welcome to our plus platform. We are glad to have you on board.");
+        welcomeEmailPlus.setContent(
+            "Welcome to our plus platform. We are glad to have you on board."
+        );
 
         WelcomeEmail welcomeEmailNonPlus = new WelcomeEmail();
-        welcomeEmailNonPlus.setContent("Welcome to our non-plus platform. We are glad to have you on board.");
+        welcomeEmailNonPlus.setContent(
+            "Welcome to our non-plus platform. We are glad to have you on board."
+        );
 
         /* * WHY WE CAN'T USE SINGLETON HERE:
-         * Singleton pattern ensures only ONE instance exists globally. 
+         * Singleton pattern ensures only ONE instance exists globally.
          * If we made WelcomeEmail a Singleton:
          * 1. Changing 'content' for 'welcomeEmailPlus' would also change it for 'welcomeEmailNonPlus'.
          * 2. We cannot have two different versions (Plus vs. Non-Plus) at the same time.

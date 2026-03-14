@@ -1,6 +1,7 @@
 package SOLID.ISP.GoodCode;
 
 public class MultiPurposeMachine implements Printer, Scanner, Copier {
+
     @Override
     public void copy(Document doc) {
         System.out.println("Copy document...");
@@ -14,6 +15,5 @@ public class MultiPurposeMachine implements Printer, Scanner, Copier {
     @Override
     public void scan(Document doc) {
         System.out.println("Scan document...");
-
     }
 }

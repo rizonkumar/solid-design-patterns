@@ -39,5 +39,3 @@ Each optional method returns the builder instance itself. This enables **Method 
 | **Optional Params** | Requires `null` or multiple constructors | Just skip the method call                |
 | **Readability**     | Hard to tell what each value does        | Explicit method names (e.g., `withSide`) |
 | **Immutability**    | Hard to achieve with many params         | Easily achieved with `final` fields      |
-
-

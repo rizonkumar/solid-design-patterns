@@ -7,6 +7,7 @@ package DesignPatterns.CreationalPatterns.SingletonDesignPattern.After;
  * - Thread-safe: the static holder (JudgeAnalyticsHolder) is lazily loaded by the JVM.
  */
 public class JudgeAnalytics {
+
     private int run = 0;
     private int submit = 0;
 
@@ -39,6 +40,7 @@ public class JudgeAnalytics {
     }
 
     private static class JudgeAnalyticsHolder {
+
         private static final JudgeAnalytics INSTANCE = new JudgeAnalytics();
     }
 }

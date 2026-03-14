@@ -1,4 +1,3 @@
 package SOLID.ISP.GoodCode;
 
-public class Document {
-}
+public class Document {}

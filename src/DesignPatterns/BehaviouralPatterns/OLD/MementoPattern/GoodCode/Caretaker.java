@@ -4,6 +4,7 @@ import java.util.Stack;
 
 // Caretaker class: Manage Mementos (snapshots of the texteditor state)
 public class Caretaker {
+
     private final Stack<EditorMemento> history = new Stack<>();
 
     public void saveState(TextEditor editor) {
