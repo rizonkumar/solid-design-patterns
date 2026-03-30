@@ -4,13 +4,14 @@ import java.util.*;
 
 /**
  * PROBLEM 1: Lack of a Common Interface.
- * There is no 'CatalogComponent' or 'Component' interface. 
+ * There is no 'CatalogComponent' or 'Component' interface.
  * This prevents treating single items and bundles uniformly.
  */
 class Product {
+
     private String name;
     private double price;
-    
+
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
@@ -30,9 +31,10 @@ class Product {
  * This class can only store 'Product' objects. It cannot store other bundles.
  */
 class ProductBundle {
+
     private String bundleName;
     private List<Product> products = new ArrayList<>();
-    
+
     public ProductBundle(String bundleName) {
         this.bundleName = bundleName;
     }
@@ -59,10 +61,11 @@ class ProductBundle {
 }
 
 class Main {
+
     public static void main(String[] args) {
         Product book = new Product("Book", 500);
         Product charger = new Product("Charger", 800);
-        
+
         ProductBundle iphoneCombo = new ProductBundle("iPhone Combo Pack");
         iphoneCombo.addProduct(charger);
 
@@ -73,13 +76,13 @@ class Main {
         List<Object> cart = new ArrayList<>();
         cart.add(book);
         cart.add(iphoneCombo);
-        
+
         double total = 0;
         System.out.println("Cart Details:\n");
 
         /**
          * PROBLEM 4: Violation of Open/Closed Principle.
-         * If we add a new type (e.g., 'DigitalSubscription'), we must 
+         * If we add a new type (e.g., 'DigitalSubscription'), we must
          * come back here and add another 'instanceof' block.
          */
         for (Object item : cart) {

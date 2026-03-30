@@ -54,4 +54,3 @@ Creational patterns deal with **object creation mechanisms**, trying to create o
 3. **Does the object have 5+ optional configuration parts?** → **Builder**.
 4. **Are you choosing between implementations of one interface?** → **Factory Method**.
 5. **Are you choosing a whole suite of related tools based on a region/theme?** → **Abstract Factory**.
-

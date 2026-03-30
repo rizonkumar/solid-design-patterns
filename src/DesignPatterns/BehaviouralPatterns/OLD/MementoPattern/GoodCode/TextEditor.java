@@ -1,6 +1,7 @@
 package DesignPatterns.BehaviouralPatterns.OLD.MementoPattern.GoodCode;
 
 public class TextEditor {
+
     private String content;
 
     public void write(String text) {
@@ -20,6 +21,4 @@ public class TextEditor {
     public String getContent() {
         return content;
     }
-
 }
-

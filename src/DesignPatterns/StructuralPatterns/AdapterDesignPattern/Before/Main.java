@@ -2,15 +2,18 @@ package DesignPatterns.StructuralPatterns.AdapterDesignPattern.Before;
 
 // 1. TARGET INTERFACE: The standard our system expects.
 interface PaymentGateway {
-  void pay(String orderId, double amount);
+    void pay(String orderId, double amount);
 }
 
 // 2. COMPATIBLE IMPLEMENTATION: Works perfectly with our service.
 class PayUGateway implements PaymentGateway {
-  @Override
-  public void pay(String orderId, double amount) {
-      System.out.println("Paid Rs. " + amount + " using PayU for order: " + orderId);
-  }
+
+    @Override
+    public void pay(String orderId, double amount) {
+        System.out.println(
+            "Paid Rs. " + amount + " using PayU for order: " + orderId
+        );
+    }
 }
 
 /**
@@ -20,8 +23,14 @@ class PayUGateway implements PaymentGateway {
  * Instead of 'orderId', it uses 'invoiceId'.
  */
 class RazorpayAPI {
+
     public void makePayment(String invoiceId, double amountInRupees) {
-        System.out.println("Paid Rs. " + amountInRupees + " using Razorpay for invoice: " + invoiceId);
+        System.out.println(
+            "Paid Rs. " +
+                amountInRupees +
+                " using Razorpay for invoice: " +
+                invoiceId
+        );
     }
 }
 
@@ -29,6 +38,7 @@ class RazorpayAPI {
  * 4. CLIENT: The service that depends on the Target Interface.
  */
 class CheckoutService {
+
     private PaymentGateway paymentGateway;
 
     public CheckoutService(PaymentGateway paymentGateway) {
@@ -41,14 +51,15 @@ class CheckoutService {
 }
 
 public class Main {
-      public static void main(String[] args) {
+
+    public static void main(String[] args) {
         // Works fine
         CheckoutService payUService = new CheckoutService(new PayUGateway());
         payUService.checkout("12", 1780);
 
         // PROBLEM: We cannot use Razorpay here!
-        // CheckoutService razorpayService = new CheckoutService(new RazorpayAPI()); 
-        // ^ This will cause a COMPILATION ERROR because RazorpayAPI does not 
+        // CheckoutService razorpayService = new CheckoutService(new RazorpayAPI());
+        // ^ This will cause a COMPILATION ERROR because RazorpayAPI does not
         // implement the PaymentGateway interface.
     }
 }

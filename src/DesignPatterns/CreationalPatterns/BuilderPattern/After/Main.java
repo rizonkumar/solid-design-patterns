@@ -3,6 +3,7 @@ package DesignPatterns.CreationalPatterns.BuilderPattern.After;
 import java.util.List;
 
 class BurgerMeal {
+
     // 1. Immutability: Use 'final' so the fields cannot be changed after the object is built.
     private final String breadType;
     private final String patty;
@@ -10,7 +11,7 @@ class BurgerMeal {
     private final String side;
     private final List<String> drinks;
 
-    // 2. Private Constructor: Prevents direct instantiation. 
+    // 2. Private Constructor: Prevents direct instantiation.
     // The ONLY way to create a BurgerMeal is through the Builder.
     private BurgerMeal(BurgerMealWithBuilder builder) {
         this.breadType = builder.breadType;
@@ -20,9 +21,10 @@ class BurgerMeal {
         this.drinks = builder.drinks;
     }
 
-    // 3. Static Nested Class: Being 'static' means we can create the Builder 
+    // 3. Static Nested Class: Being 'static' means we can create the Builder
     // without needing an existing instance of BurgerMeal.
     public static class BurgerMealWithBuilder {
+
         private String breadType;
         private String patty;
         private boolean hasCheese;
@@ -60,21 +62,39 @@ class BurgerMeal {
 
     @Override
     public String toString() {
-        return "BurgerMeal [breadType=" + breadType + ", patty=" + patty + 
-               ", hasCheese=" + hasCheese + ", side=" + side + ", drinks=" + drinks + "]";
+        return (
+            "BurgerMeal [breadType=" +
+            breadType +
+            ", patty=" +
+            patty +
+            ", hasCheese=" +
+            hasCheese +
+            ", side=" +
+            side +
+            ", drinks=" +
+            drinks +
+            "]"
+        );
     }
 }
 
 public class Main {
+
     public static void main(String[] args) {
         // Look how clean the client code is now! No more "null" values.
-        BurgerMeal basic = new BurgerMeal.BurgerMealWithBuilder("wheat", "non-veg").build();
-        
-        BurgerMeal fullMeal = new BurgerMeal.BurgerMealWithBuilder("wheat", "non-veg")
-                .withCheese(true)
-                .withSide("fries")
-                .withDrinks(List.of("coke"))
-                .build();
+        BurgerMeal basic = new BurgerMeal.BurgerMealWithBuilder(
+            "wheat",
+            "non-veg"
+        ).build();
+
+        BurgerMeal fullMeal = new BurgerMeal.BurgerMealWithBuilder(
+            "wheat",
+            "non-veg"
+        )
+            .withCheese(true)
+            .withSide("fries")
+            .withDrinks(List.of("coke"))
+            .build();
 
         System.out.println(basic);
         System.out.println(fullMeal);

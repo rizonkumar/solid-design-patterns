@@ -20,4 +20,3 @@ The client code is forced to use the `new` keyword with a concrete class (`new W
 
 - **The Issue:** If you only have access to an interface (`EmailTemplate`), you cannot create a new instance of that object without knowing its specific class.
 - **The Prototype Solution:** Prototype allows you to ask an existing object to "clone itself" without the client needing to know the specific class type.
-

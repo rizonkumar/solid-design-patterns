@@ -19,6 +19,7 @@ interface Subject {
 
 // Weather Station India (Publisher)
 class WeatherStationIn implements Subject {
+
     private final List<Observer> observerList;
     private float temperature;
 
@@ -51,6 +52,7 @@ class WeatherStationIn implements Subject {
 
 // Concrete Observer
 class DisplayDeviceIn implements Observer {
+
     private final String name;
 
     public DisplayDeviceIn(String deviceName) {
@@ -65,6 +67,7 @@ class DisplayDeviceIn implements Observer {
 
 // Another Concrete Observer
 class MobileDevice implements Observer {
+
     @Override
     public void update(float temp) {
         System.out.println("Temp on Mobile is " + temp);
@@ -72,6 +75,7 @@ class MobileDevice implements Observer {
 }
 
 public class ObserverPattern {
+
     public static void main(String[] args) {
         WeatherStationIn weatherStationIn = new WeatherStationIn();
 

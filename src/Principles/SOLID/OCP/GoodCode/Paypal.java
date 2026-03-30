@@ -1,6 +1,6 @@
 package SOLID.OCP.GoodCode;
 
-public class Paypal implements PaymentMethod{
+public class Paypal implements PaymentMethod {
 
     @Override
     public void pay(double amount) {

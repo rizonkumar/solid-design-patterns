@@ -7,10 +7,9 @@ package SOLID.ISP.BadCode;
  *
  */
 public class SimplePrinter implements Machine {
-    @Override
-    public void print(Document doc) {
 
-    }
+    @Override
+    public void print(Document doc) {}
 
     @Override
     public void scan(Document doc) {

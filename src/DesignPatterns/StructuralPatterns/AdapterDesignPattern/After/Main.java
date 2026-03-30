@@ -13,29 +13,39 @@ interface PaymentGateway {
  * A standard implementation that already follows our internal contract.
  */
 class PayUGateway implements PaymentGateway {
+
     @Override
     public void pay(String orderId, double amount) {
-        System.out.println("Paid Rs. " + amount + " using PayU for order: " + orderId);
+        System.out.println(
+            "Paid Rs. " + amount + " using PayU for order: " + orderId
+        );
     }
 }
 
 /**
  * 3. ADAPTEE (The External Legacy/Third-Party System)
- * This class has the functionality we need, but its interface is incompatible 
+ * This class has the functionality we need, but its interface is incompatible
  * with our PaymentGateway (different method names/parameters).
  */
 class RazorpayAPI {
+
     public void makePayment(String invoiceId, double amountInRupees) {
-        System.out.println("Paid Rs. " + amountInRupees + " using Razorpay for invoice: " + invoiceId);
+        System.out.println(
+            "Paid Rs. " +
+                amountInRupees +
+                " using Razorpay for invoice: " +
+                invoiceId
+        );
     }
 }
 
 /**
  * 4. THE ADAPTER
- * This is the "Wrapper." It implements the Target interface and delegates 
+ * This is the "Wrapper." It implements the Target interface and delegates
  * the work to the Adaptee (RazorpayAPI).
  */
 class RazorpayAdapter implements PaymentGateway {
+
     private RazorpayAPI razorpayAPI;
 
     public RazorpayAdapter() {
@@ -55,11 +65,12 @@ class RazorpayAdapter implements PaymentGateway {
 
 /**
  * 5. CLIENT
- * Stays 100% decoupled. It doesn't know (or care) if it's talking to 
+ * Stays 100% decoupled. It doesn't know (or care) if it's talking to
  * PayU directly or to Razorpay via an Adapter.
  */
 
 class CheckoutService {
+
     private PaymentGateway paymentGateway;
 
     public CheckoutService(PaymentGateway paymentGateway) {
@@ -72,12 +83,15 @@ class CheckoutService {
 }
 
 class Main {
+
     public static void main(String[] args) {
         // SUCCESS: We can now plug the 'Adapter' into the 'Service'.
-        // This follows the Open/Closed Principle: We added Razorpay 
+        // This follows the Open/Closed Principle: We added Razorpay
         // without modifying the CheckoutService class.
-        CheckoutService checkoutService = new CheckoutService(new RazorpayAdapter());
-            
+        CheckoutService checkoutService = new CheckoutService(
+            new RazorpayAdapter()
+        );
+
         checkoutService.checkout("12", 1780);
     }
 }

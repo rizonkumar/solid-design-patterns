@@ -11,24 +11,28 @@ interface Invoice {
 
 // 2. CONCRETE PRODUCTS: Regional implementations
 class RazorpayGateway implements PaymentGateway {
+
     public void processPayment(double amount) {
         System.out.println("Processing INR payment via Razorpay: " + amount);
     }
 }
 
 class GSTInvoice implements Invoice {
+
     public void generateInvoice() {
         System.out.println("Generating GST Invoice for India.");
     }
 }
 
 class PayPalGateway implements PaymentGateway {
+
     public void processPayment(double amount) {
         System.out.println("Processing USD payment via PayPal: " + amount);
     }
 }
 
 class USInvoice implements Invoice {
+
     public void generateInvoice() {
         System.out.println("Generating Invoice as per US norms.");
     }
@@ -44,8 +48,11 @@ interface RegionFactory {
 // 4. CONCRETE FACTORIES: These handle regional specifics.
 // Note: These classes encapsulate the 'new' keyword and regional 'if-else' logic.
 class IndiaFactory implements RegionFactory {
+
     public PaymentGateway createPaymentGateway(String gatewayType) {
-        if (gatewayType.equalsIgnoreCase("razorpay")) return new RazorpayGateway();
+        if (
+            gatewayType.equalsIgnoreCase("razorpay")
+        ) return new RazorpayGateway();
         // Add PayU logic here...
         throw new IllegalArgumentException("Unsupported gateway for India.");
     }
@@ -56,6 +63,7 @@ class IndiaFactory implements RegionFactory {
 }
 
 class USFactory implements RegionFactory {
+
     public PaymentGateway createPaymentGateway(String gatewayType) {
         if (gatewayType.equalsIgnoreCase("paypal")) return new PayPalGateway();
         // Add Stripe logic here...
@@ -73,6 +81,7 @@ class USFactory implements RegionFactory {
  * It only knows about the 'RegionFactory' interface.
  */
 class CheckoutService {
+
     private final PaymentGateway paymentGateway;
     private final Invoice invoice;
 
@@ -89,13 +98,20 @@ class CheckoutService {
 }
 
 class Main {
+
     public static void main(String[] args) {
         // We decide the "Family" (India) at the entry point of the application.
-        CheckoutService indiaCheckout = new CheckoutService(new IndiaFactory(), "razorpay");
+        CheckoutService indiaCheckout = new CheckoutService(
+            new IndiaFactory(),
+            "razorpay"
+        );
         indiaCheckout.completeOrder(1999.0);
 
         // Switching regions is as easy as passing a different Factory instance.
-        CheckoutService usCheckout = new CheckoutService(new USFactory(), "paypal");
+        CheckoutService usCheckout = new CheckoutService(
+            new USFactory(),
+            "paypal"
+        );
         usCheckout.completeOrder(49.99);
     }
 }

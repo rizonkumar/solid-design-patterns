@@ -1,7 +1,7 @@
 package DesignPatterns.BehaviouralPatterns.OLD.MementoPattern.GoodCode;
 
-
 public class TextEditorMain {
+
     public static void main(String[] args) {
         TextEditor editor = new TextEditor();
         Caretaker caretaker = new Caretaker(); // History // State management
@@ -15,7 +15,8 @@ public class TextEditorMain {
         // Undo the last write
         caretaker.undo(editor);
 
-        System.out.println("Printing the current content : " + editor.getContent());
-
+        System.out.println(
+            "Printing the current content : " + editor.getContent()
+        );
     }
 }

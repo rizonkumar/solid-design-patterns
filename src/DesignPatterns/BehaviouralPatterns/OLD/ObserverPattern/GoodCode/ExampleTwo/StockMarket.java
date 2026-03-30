@@ -36,8 +36,12 @@ public class StockMarket implements Subject {
         }
     }
 
-    public void setStockPrice(String stockSymbol, double newPrice, double oldPrice) {
-        double priceChange = Math.abs(newPrice - oldPrice) / oldPrice * 100;
+    public void setStockPrice(
+        String stockSymbol,
+        double newPrice,
+        double oldPrice
+    ) {
+        double priceChange = (Math.abs(newPrice - oldPrice) / oldPrice) * 100;
         if (priceChange >= priceChangeThreshold) {
             // TODO: Notify observers if the price change exceeds the threshold
             notifyObservers(stockSymbol, newPrice);

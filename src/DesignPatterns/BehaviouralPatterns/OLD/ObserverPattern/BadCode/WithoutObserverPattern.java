@@ -1,12 +1,14 @@
 package DesignPatterns.BehaviouralPatterns.OLD.ObserverPattern.BadCode;
 
 class DisplayDevice {
+
     public void showTemp(float temp) {
         System.out.println("Current Temp: " + temp + " C");
     }
 }
 
 class WeatherStation {
+
     private float temperature;
     private DisplayDevice displayDevice; // can be multiple devices later
 
@@ -24,6 +26,7 @@ class WeatherStation {
 }
 
 public class WithoutObserverPattern {
+
     public static void main(String[] args) {
         DisplayDevice device = new DisplayDevice();
         WeatherStation station = new WeatherStation(device);

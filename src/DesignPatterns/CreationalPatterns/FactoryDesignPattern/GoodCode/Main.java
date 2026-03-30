@@ -13,6 +13,7 @@ interface Logistics {
  * Specific implementations of the Logistics interface.
  */
 class Road implements Logistics {
+
     @Override
     public void send() {
         System.out.println("Sending by road logic");
@@ -20,6 +21,7 @@ class Road implements Logistics {
 }
 
 class Air implements Logistics {
+
     @Override
     public void send() {
         System.out.println("Sending by air logic");
@@ -32,6 +34,7 @@ class Air implements Logistics {
  * This is the only place where the system decides which class to create.
  */
 class LogisticsFactory {
+
     public static Logistics getLogistics(String mode) {
         // Benefit: We can use ignoreCase to prevent common string typos
         if (mode.equalsIgnoreCase("Air")) {
@@ -39,7 +42,7 @@ class LogisticsFactory {
         } else if (mode.equalsIgnoreCase("Road")) {
             return new Road();
         }
-        
+
         // Error Handling: Centralized place to handle invalid requests
         throw new IllegalArgumentException("Unknown logistics mode: " + mode);
     }
@@ -51,8 +54,9 @@ class LogisticsFactory {
  * It is decoupled from 'Air' and 'Road' classes.
  */
 class LogisticsService {
+
     public void send(String mode) {
-        /* Dependency Inversion: The service depends on the Logistics interface, 
+        /* Dependency Inversion: The service depends on the Logistics interface,
            not the concrete Air/Road implementations.
         */
         Logistics logistics = LogisticsFactory.getLogistics(mode);
@@ -62,6 +66,7 @@ class LogisticsService {
 
 // Driver Code
 class Main {
+
     public static void main(String[] args) {
         LogisticsService service = new LogisticsService();
         service.send("Air");

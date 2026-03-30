@@ -1,6 +1,7 @@
 package SOLID.SRP.GoodCode;
 
 public class Invoice {
+
     private double amount;
 
     public Invoice(double amount) {
@@ -11,5 +12,4 @@ public class Invoice {
     public void generateInvoice() {
         System.out.println("Invoice generated & printed for amount " + amount);
     }
-
 }

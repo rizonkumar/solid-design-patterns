@@ -58,5 +58,3 @@ If another piece of code expects a `File` object that can both **read** and **wr
 * Any code using `File` now has to add **extra checks** (e.g., “is this file read-only?”), which defeats the purpose of polymorphism.
 
 ---
-
-

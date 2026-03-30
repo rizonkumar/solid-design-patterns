@@ -1,6 +1,7 @@
 package DesignPatterns.BehaviouralPatterns.OLD.MementoPattern.BadCode;
 
 public class TextEditorMain {
+
     public static void main(String[] args) {
         TextEditor editor = new TextEditor();
         editor.write("Hello World");

@@ -112,4 +112,3 @@ The improved code correctly applies the **Memento Pattern** by separating respon
 
 This design provides **undo functionality** while keeping the **internal state private**, **code maintainable**, and *
 *extensible** — fully addressing the shortcomings of the old implementation.
-

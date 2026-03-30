@@ -1,5 +1,3 @@
 package SOLID.LSP.GoodCode;
 
-public class ReadOnlyFile extends ReadableFile {
-
-}
+public class ReadOnlyFile extends ReadableFile {}

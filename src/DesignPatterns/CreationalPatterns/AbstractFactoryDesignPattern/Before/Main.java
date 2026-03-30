@@ -7,6 +7,7 @@ interface PaymentGateway {
 
 // Concrete Product A1
 class RazorpayGateway implements PaymentGateway {
+
     public void processPayment(double amount) {
         System.out.println("Processing INR payment via Razorpay: " + amount);
     }
@@ -14,6 +15,7 @@ class RazorpayGateway implements PaymentGateway {
 
 // Concrete Product A2
 class PayUGateway implements PaymentGateway {
+
     public void processPayment(double amount) {
         System.out.println("Processing INR payment via PayU: " + amount);
     }
@@ -26,6 +28,7 @@ interface Invoice {
 
 // Concrete Product B1
 class GSTInvoice implements Invoice {
+
     public void generateInvoice() {
         System.out.println("Generating GST Invoice for India.");
     }
@@ -36,6 +39,7 @@ class GSTInvoice implements Invoice {
  * This class handles both the BUSINESS logic (checkout) and the CREATION logic (new keyword).
  */
 class CheckoutService {
+
     private String gatewayType;
 
     public CheckoutService(String gatewayType) {
@@ -60,12 +64,13 @@ class CheckoutService {
         // What if we expand to the US? We would need a 'TaxInvoice' instead of 'GSTInvoice'.
         // Currently, we are hard-coding GSTInvoice here. There is no way to ensure the
         // PaymentGateway and Invoice "match" as a family.
-        Invoice invoice = new GSTInvoice(); 
+        Invoice invoice = new GSTInvoice();
         invoice.generateInvoice();
     }
 }
 
 class Main {
+
     public static void main(String[] args) {
         CheckoutService razorpayService = new CheckoutService("razorpay");
         razorpayService.checkOut(1500.00);
