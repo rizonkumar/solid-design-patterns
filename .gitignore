@@ -30,3 +30,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+node_modules/
+dist/
+coverage/
+logs/
+*.log
