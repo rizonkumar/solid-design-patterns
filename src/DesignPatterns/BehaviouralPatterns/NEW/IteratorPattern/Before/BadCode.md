@@ -47,6 +47,3 @@ In the provided implementation, the `YouTubePlaylist` serves as a simple wrapper
 ## 4. Summary of the "Smell"
 
 When a class says **"Here is my internal list, go loop through it yourself,"** it is abdicating its responsibility. A well-designed collection should provide a way to access its elements **one by one** without showing how they are stored. This is where the **Iterator Pattern** comes in—it provides a standard "Remote Control" to move through the collection.
-
-**Next Step:**
-Would you like to see the **`GoodCode.java`** refactor where we implement a custom `Iterator` to hide the `ArrayList`?
