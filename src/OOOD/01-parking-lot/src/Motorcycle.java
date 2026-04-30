@@ -1,7 +1,7 @@
-public class Car implements Vehicle {
-    public String licensePlate;
+public class Motorcycle implements Vehicle {
+    private String licensePlate;
 
-    public Car(String licensePlate) {
+    public Motorcycle(String licensePlate) {
         this.licensePlate = licensePlate;
     }
 
@@ -12,6 +12,6 @@ public class Car implements Vehicle {
 
     @Override
     public VehicleSize getSize() {
-        return VehicleSize.MEDIUM;
+        return VehicleSize.SMALL;
     }
 }
