@@ -36,3 +36,6 @@ dist/
 coverage/
 logs/
 *.log
+
+### Compiled files ###
+*.class

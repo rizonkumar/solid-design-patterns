@@ -108,6 +108,112 @@ Below is the representation of this class.
 
 ![Parking Lot Class Diagram](./assets/parking_lot.png)
 
+## Adding a New Parking Spot Type
+
+The parking lot system is designed to support multiple parking spot types (e.g., `CompactSpot`, `RegularSpot`, `OversizedSpot`). However, there may be a need to introduce a new type, such as a handicapped parking spot, to accommodate specific requirements like accessibility. The challenge is to extend the system efficiently without modifying existing classes, adhering to the Open-Closed Principle (open for extension, closed for modification).
+
+To achieve this, we can introduce a new `HandicappedSpot` class that implements the existing `ParkingSpot` interface. This approach ensures smooth integration with the system’s spot allocation and management logic, as `ParkingManager` already relies on the `ParkingSpot` interface for handling spots.
+
+![Parking Spot with HandicappedSpot class](./assets/handicapped_spot.png)
+
+## Code Implementation Details
+
+### System Data Flow
+
+The end-to-end data flow of the parking lot system revolves around a vehicle entering and exiting:
+
+1. **Vehicle Entry**:
+   - A `Vehicle` (e.g., `Car`, `Motorcycle`, `Truck`) arrives at the parking lot.
+   - The client calls `ParkingLot.enterVehicle(Vehicle)`.
+   - `ParkingLot` delegates to `ParkingManager` to find an available `ParkingSpot` that fits the vehicle's `VehicleSize`.
+   - If a spot is found, `ParkingManager` occupies the spot, records the mapping, and marks it as unavailable.
+   - `ParkingLot` then generates a `Ticket` storing the vehicle, spot, and current entry time, and returns it.
+
+2. **Vehicle Exit**:
+   - The vehicle prepares to leave, and the client calls `ParkingLot.leaveVehicle(Ticket)`.
+   - `ParkingLot` sets the exit time on the `Ticket`.
+   - `ParkingLot` delegates to `ParkingManager` to free the `ParkingSpot` so it can be reused.
+   - `ParkingLot` calls `FareCalculator.calculateFare(Ticket)` to determine the final cost using applied strategies (like `BaseFareStrategy` and `PeakHoursFareStrategy`).
+   - The final calculated fare is returned to the client.
+
+The implementation follows the principles outlined in our design, focusing on modularity and extensibility. Here are the responsibilities for the key components:
+
+### Vehicle
+
+We define the `Vehicle` interface, along with its supporting `VehicleSize` enum and concrete classes `Motorcycle`, `Car`, and `Truck`, to set up how vehicles are identified and sized in the parking lot system.
+
+This interface ensures every vehicle provides two key attributes: a license plate for tracking and a size for managing parking spaces. This design ensures that every vehicle provides consistent, type-safe attributes critical for tracking, parking spot allocation, and fee calculation.
+
+*Implementation choice:* The `VehicleSize` enum (`SMALL`, `MEDIUM`, `LARGE`) standardizes vehicle and parking spot sizes, ensuring type-safe, error-free size comparisons for efficient spot allocation and fee calculation.
+
+*Alternatives and trade-offs:*
+- **Strings:** Prone to typos and slower comparisons (O(n)), requiring validation. Rejected for fragility and performance issues.
+- **Integers:** Ambiguous and error-prone, lacking type safety. Rejected for reduced clarity and reliability.
+
+### ParkingSpot
+
+We define the `ParkingSpot` interface to represent individual parking spots in the parking lot system, along with its concrete classes `CompactSpot`, `RegularSpot`, `OversizedSpot`, and `HandicappedSpot`.
+
+The `ParkingSpot` interface defines these core methods:
+- `isAvailable()`: Checks if the spot is free. Helps `ParkingManager` decide if the spot can be assigned.
+- `occupy(Vehicle vehicle)`: Assigns a vehicle to the spot if it’s available, setting vehicle to the provided instance.
+- `vacate()`: Clears the spot by setting the vehicle to null, making the spot free for reuse. Allows `ParkingManager` to reassign it to another vehicle.
+- `getSize()`: Returns the spot’s fixed `VehicleSize` (e.g., `SMALL` for `CompactSpot`). Guides `ParkingManager` in matching vehicle sizes to parking spot capacities.
+
+Concrete implementations structure size logic:
+- `CompactSpot`: Returns `VehicleSize.SMALL`.
+- `RegularSpot`: Returns `VehicleSize.MEDIUM`, suitable for medium-sized vehicles like cars.
+- `OversizedSpot`: Returns `VehicleSize.LARGE`, designed for large vehicles like trucks.
+
+This implementation keeps `ParkingSpot` lean and focused, managing its state while delegating allocation logic to `ParkingManager`.
+
+### ParkingManager
+
+The `ParkingManager` class manages the allocation and tracking of parking spots in the parking lot system. It searches and assigns spots to vehicles, freeing them when vehicles leave and keeping an accurate record of which vehicles occupy which parking spots.
+
+- `findSpotForVehicle(Vehicle vehicle)`: Searches for an available parking spot that fits the vehicle’s size.
+- `parkVehicle(Vehicle vehicle)`: Assigns a parking spot to the vehicle by calling `findSpotForVehicle()` and then marks it as occupied via `occupy()`. Records the vehicle-spot pair and removes the spot from the available pool, ensuring accurate tracking and availability updates.
+- `unparkVehicle(Vehicle vehicle)`: Retrieves the parking spot for the given vehicle, frees the spot via `vacate()`, and adds it back to the available pool. Removes the vehicle-spot mapping, keeping the system’s state current for future allocations.
+
+*Implementation choice:* We used two HashMaps:
+1. **availableSpots**: Maintains a list of parking spots ready for use, organized by `VehicleSize`. It ensures that vehicles land in the best-fit parking spot. For instance, motorcycles fit into small spots like `CompactSpot`, while cars use medium spots like `RegularSpot`. This organization allows `ParkingManager` to quickly find the smallest, most suitable size available.
+2. **vehicleToSpotMap**: Records which parking spot each vehicle occupies. It allows `ParkingManager` to locate and free up a parking spot when a vehicle leaves, keeping the system’s state up to date.
+
+*Here’s why these choices matter:*
+- **Performance:** Using HashMaps provides O(1) time complexity for accessing parking spots by size or finding a vehicle’s parking spot. However, checking availability within a specific size requires additional steps.
+- **Best Fit:** Organizing parking spots by `VehicleSize` ensures vehicles park in the smallest spot that fits them, optimizing space usage.
+
+### Ticket
+
+The `Ticket` class acts as a record of a parking event, linking a vehicle to its parking spot and tracking the time spent in the parking lot.
+
+### FareStrategy and FareCalculator
+
+We implement the `FareStrategy` interface and its concrete classes, `BaseFareStrategy` and `PeakHoursFareStrategy`, along with the `FareCalculator` class. These components manage the parking fee calculation process in the parking lot system. Together, they determine the cost of each parking session.
+
+*Implementation choice:* We define `FareStrategy` as an interface to support a flexible and extensible approach to pricing rules, allowing new strategies (e.g., a WeekendDiscountStrategy) to integrate without altering existing code.
+
+The concrete class `BaseFareStrategy` implements this interface:
+- `calculateFare(Ticket ticket, BigDecimal inputFare)`: Provides the foundational cost for the parking session, reflecting size-based pricing.
+
+The concrete class `PeakHoursFareStrategy` implements this interface:
+- `calculateFare(Ticket ticket, BigDecimal inputFare)`: Multiplies the input fare by 1.5 if the entry time falls within peak hours. Otherwise, it leaves it unchanged. Adjusts the fare for high-demand periods, increasing costs during busy times.
+- `isPeakHours(LocalDateTime time)`: Checks if the given time’s hour is within peak ranges.
+
+The `FareCalculator` class uses these strategies:
+- `FareCalculator(List<FareStrategy> fareStrategies)`: Initializes with a list of strategies, setting up the rules to apply during fare calculation.
+- `calculateFare(Ticket ticket)`: Starts with a zero fare, iterates through each strategy in the list, and applies their rules in sequence to build the final fare.
+
+*Implementation choice:* We implement `FareCalculator` using a `List<FareStrategy>` to hold strategies, enabling the sequential application of multiple rules (e.g., base fare followed by peak adjustment). We choose List over an array or Set because it preserves order. Strategies like `BaseFareStrategy` must be applied before `PeakHoursFareStrategy` for correct fare calculation. A Set can prevent duplicates but loses order, while an array maintains a fixed size, limiting flexibility.
+
+### ParkingLot Code
+
+The `ParkingLot` class acts as a facade, providing a simple interface for clients to interact with the parking lot system while delegating complex tasks to `ParkingManager` and `FareCalculator`. It relies on `ParkingManager` for spot allocation and `FareCalculator` for pricing, managing the flow of vehicles through entry and exit operations.
+
+- `enterVehicle(Vehicle vehicle)`: Coordinates vehicle entry by requesting a parking spot from `ParkingManager`. It then generates a `Ticket` with a unique ID, vehicle, parking spot, and current entry time.
+- `leaveVehicle(Ticket ticket)`: Manages vehicle exit by setting the exit time, frees the parking spot via `ParkingManager`, and calculates the fare with `FareCalculator`.
+
 ## Complete Class Diagram
 
 ![Complete Class Diagram](./assets/complete_class_diagram.png)
+
