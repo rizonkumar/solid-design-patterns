@@ -108,6 +108,45 @@ Below is the representation of this class.
 
 ![Parking Lot Class Diagram](./assets/parking_lot.png)
 
+## Adding a New Parking Spot Type
+
+The parking lot system is designed to support multiple parking spot types (e.g., `CompactSpot`, `RegularSpot`, `OversizedSpot`). However, there may be a need to introduce a new type, such as a handicapped parking spot, to accommodate specific requirements like accessibility. The challenge is to extend the system efficiently without modifying existing classes, adhering to the Open-Closed Principle (open for extension, closed for modification).
+
+To achieve this, we can introduce a new `HandicappedSpot` class that implements the existing `ParkingSpot` interface. This approach ensures smooth integration with the system’s spot allocation and management logic, as `ParkingManager` already relies on the `ParkingSpot` interface for handling spots.
+
+```mermaid
+classDiagram
+    class ParkingSpot {
+        <<interface>>
+        +boolean isAvailable()
+        +void occupy(Vehicle vehicle)
+        +void vacate()
+        +int getSpotNumber()
+        +VehicleSize getSize()
+    }
+    class CompactSpot {
+        -int spotNumber
+        -Vehicle vehicle
+    }
+    class RegularSpot {
+        -int spotNumber
+        -Vehicle vehicle
+    }
+    class OversizedSpot {
+        -int spotNumber
+        -Vehicle vehicle
+    }
+    class HandicappedSpot {
+        -int spotNumber
+        -Vehicle vehicle
+    }
+
+    ParkingSpot <|.. CompactSpot
+    ParkingSpot <|.. RegularSpot
+    ParkingSpot <|.. OversizedSpot
+    ParkingSpot <|.. HandicappedSpot
+```
+
 ## Complete Class Diagram
 
 ![Complete Class Diagram](./assets/complete_class_diagram.png)
