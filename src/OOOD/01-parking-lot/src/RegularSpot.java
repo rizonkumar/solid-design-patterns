@@ -1,8 +1,8 @@
-public class HandicappedSpot implements ParkingSpot {
+public class RegularSpot implements ParkingSpot {
     private int spotNumber;
     private Vehicle vehicle;
 
-    public HandicappedSpot(int spotNumber) {
+    public RegularSpot(int spotNumber) {
         this.spotNumber = spotNumber;
         this.vehicle = null;
     }
@@ -19,10 +19,8 @@ public class HandicappedSpot implements ParkingSpot {
 
     @Override
     public void occupy(Vehicle vehicle) {
-        if (isAvailable()) {
+        if(isAvailable()) {
             this.vehicle = vehicle;
-        } else {
-            // Spot is already occupied.
         }
     }
 

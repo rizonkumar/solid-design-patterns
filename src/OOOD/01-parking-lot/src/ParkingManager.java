@@ -1,3 +1,8 @@
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+
 public class ParkingManager {
     private final Map<VehicleSize, List<ParkingSpot>> availableSpots;
     private final Map<Vehicle, ParkingSpot> vehicleToSpotMap;
@@ -10,8 +15,25 @@ public class ParkingManager {
         this.spotToVehicleMap = new HashMap<>();
     }
 
+    public ParkingManager() {
+        this.availableSpots = new HashMap<>();
+        for (VehicleSize size : VehicleSize.values()) {
+            this.availableSpots.put(size, new ArrayList<>());
+        }
+        this.vehicleToSpotMap = new HashMap<>();
+        this.spotToVehicleMap = new HashMap<>();
+    }
+
+    public void addParkingSpace(ParkingSpot spot) {
+        availableSpots.get(spot.getSize()).add(spot);
+    }
+
     public ParkingSpot findSpotForVehicle(Vehicle vehicle) {
-        // No change in the method
+        List<ParkingSpot> spots = availableSpots.get(vehicle.getSize());
+        if (spots != null && !spots.isEmpty()) {
+            return spots.get(0);
+        }
+        return null;
     }
 
     public ParkingSpot parkVehicle(Vehicle vehicle) {

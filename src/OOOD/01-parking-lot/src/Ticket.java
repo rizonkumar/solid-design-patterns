@@ -1,8 +1,12 @@
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Ticket {
     private final String ticketId; // Unique ticket identifier
     private final Vehicle vehicle; // The vehicle associated with the ticket
-    // The parking spot where the vehicle is parked     private final ParkingSpot parkingSpot;
-    // // The time the vehicle entered the parking lot
+    private final ParkingSpot parkingSpot;
     private final LocalDateTime entryTime; // The time the vehicle exited the parking lot
     private LocalDateTime exitTime;
 
@@ -12,8 +16,7 @@ public class Ticket {
         this.vehicle = vehicle;
         this.parkingSpot = parkingSpot;
         this.entryTime = entryTime;
-        // Initially, exitTime is null because the vehicle is still parked         this.exitTime =
-        // null;
+        this.exitTime = null;
     }
 
     public BigDecimal calculateParkingDuration() {
@@ -22,5 +25,11 @@ public class Ticket {
                                 entryTime,
                                 Objects.requireNonNullElseGet(exitTime, LocalDateTime::now))
                         .toMinutes());
-    } // getter and setter methods are omitted for brevity
+    }
+
+    public String getId() { return ticketId; }
+    public Vehicle getVehicle() { return vehicle; }
+    public LocalDateTime getEntryTime() { return entryTime; }
+    public LocalDateTime getExitTime() { return exitTime; }
+    public void setExitTime(LocalDateTime exitTime) { this.exitTime = exitTime; }
 }

@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 public class BaseFareStrategy implements FareStrategy {
     private static final BigDecimal SMALL_VEHICLE_RATE = new BigDecimal("1.0");
     private static final BigDecimal MEDIUM_VEHICLE_RATE = new BigDecimal("2.0");

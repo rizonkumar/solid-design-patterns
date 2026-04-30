@@ -118,7 +118,25 @@ To achieve this, we can introduce a new `HandicappedSpot` class that implements 
 
 ## Code Implementation Details
 
-The implementation follows the principles outlined in our design, focusing on modularity and extensibility. Here are the responsibilities and data flow details for the key components:
+### System Data Flow
+
+The end-to-end data flow of the parking lot system revolves around a vehicle entering and exiting:
+
+1. **Vehicle Entry**:
+   - A `Vehicle` (e.g., `Car`, `Motorcycle`, `Truck`) arrives at the parking lot.
+   - The client calls `ParkingLot.enterVehicle(Vehicle)`.
+   - `ParkingLot` delegates to `ParkingManager` to find an available `ParkingSpot` that fits the vehicle's `VehicleSize`.
+   - If a spot is found, `ParkingManager` occupies the spot, records the mapping, and marks it as unavailable.
+   - `ParkingLot` then generates a `Ticket` storing the vehicle, spot, and current entry time, and returns it.
+
+2. **Vehicle Exit**:
+   - The vehicle prepares to leave, and the client calls `ParkingLot.leaveVehicle(Ticket)`.
+   - `ParkingLot` sets the exit time on the `Ticket`.
+   - `ParkingLot` delegates to `ParkingManager` to free the `ParkingSpot` so it can be reused.
+   - `ParkingLot` calls `FareCalculator.calculateFare(Ticket)` to determine the final cost using applied strategies (like `BaseFareStrategy` and `PeakHoursFareStrategy`).
+   - The final calculated fare is returned to the client.
+
+The implementation follows the principles outlined in our design, focusing on modularity and extensibility. Here are the responsibilities for the key components:
 
 ### Vehicle
 

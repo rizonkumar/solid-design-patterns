@@ -1,6 +1,9 @@
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public class PeakHoursFareStrategy implements FareStrategy {
-    // 50% higher during peak hours     private static final BigDecimal PEAK_HOURS_MULTIPLIER = new
-    // BigDecimal("1.5");
+    // 50% higher during peak hours
+    private static final BigDecimal PEAK_HOURS_MULTIPLIER = new BigDecimal("1.5");
 
     public PeakHoursFareStrategy() {}
 

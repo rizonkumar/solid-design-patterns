@@ -1,3 +1,6 @@
+import java.math.BigDecimal;
+import java.util.List;
+
 public class FareCalculator {
     private final List<FareStrategy> fareStrategies;
 

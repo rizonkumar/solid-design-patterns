@@ -1,7 +1,10 @@
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public class ParkingLot {
-    // Manages parking spots and vehicle assignments     private final ParkingManager
-    // parkingManager;
-    // Calculates fare for parking sessions     private final FareCalculator fareCalculator;
+    private final ParkingManager parkingManager;
+    private final FareCalculator fareCalculator;
 
     public ParkingLot(ParkingManager parkingManager, FareCalculator fareCalculator) {
         this.parkingManager = parkingManager;
@@ -22,8 +25,12 @@ public class ParkingLot {
         }
     }
 
+    private String generateTicketId() {
+        return UUID.randomUUID().toString();
+    }
+
     // Method to handle vehicle exit from the parking lot
-    public void leaveVehicle(Ticket ticket) {
+    public BigDecimal leaveVehicle(Ticket ticket) {
         // Ensure the ticket is valid and the vehicle hasn't already left
         if (ticket != null && ticket.getExitTime() == null) {
             // Set exit time
@@ -34,7 +41,9 @@ public class ParkingLot {
 
             // Calculate the fare
             BigDecimal fare = fareCalculator.calculateFare(ticket);
+            return fare;
         } else {
+            return BigDecimal.ZERO;
             // Invalid ticket or vehicle already exited.
         }
     }
