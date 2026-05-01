@@ -1,3 +1,5 @@
+package booking;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.time.Duration;
@@ -14,14 +16,11 @@ public class SeatLockManager {
     public synchronized boolean lockSeat(Screening screening, Seat seat, String userId) {
         String lockKey = generateLockKey(screening, seat);
 
-        // Clean up lock if expired (on-demand cleanup when another process attempts to lock)
         cleanupLockIfExpired(lockKey);
-        // Check if a seat is already locked
         if (isLocked(screening, seat)) {
             return false;
         }
 
-        // Create a new lock with expiration time
         SeatLock lock = new SeatLock(userId, LocalDateTime.now().plus(lockDuration));
         lockedSeats.put(lockKey, lock);
         return true;
@@ -29,11 +28,7 @@ public class SeatLockManager {
 
     public synchronized boolean isLocked(Screening screening, Seat seat) {
         String lockKey = generateLockKey(screening, seat);
-
-        // Clean up lock if expired (on-demand cleanup)
         cleanupLockIfExpired(lockKey);
-
-        // If we reach here, either no lock exists or it's valid
         return lockedSeats.containsKey(lockKey);
     }
 
@@ -48,7 +43,6 @@ public class SeatLockManager {
         return screening.getId() + "-" + seat.getSeatNumber();
     }
 
-    // SeatLock inner class
     private static class SeatLock {
         private final String userId;
         private final LocalDateTime expirationTime;

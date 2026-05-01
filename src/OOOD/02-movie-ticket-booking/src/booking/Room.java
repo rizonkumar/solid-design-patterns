@@ -1,3 +1,5 @@
+package booking;
+
 public class Room {
     private final String roomNumber;
     private final Layout layout;
@@ -6,5 +8,7 @@ public class Room {
         this.roomNumber = roomNumber;
         this.layout = layout;
     }
-    // TODO: getter and setter methods
+
+    public String getRoomNumber() { return roomNumber; }
+    public Layout getLayout() { return layout; }
 }

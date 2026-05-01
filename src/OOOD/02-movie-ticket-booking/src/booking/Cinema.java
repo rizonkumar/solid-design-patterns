@@ -1,3 +1,5 @@
+package booking;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,9 +14,11 @@ public class Cinema {
         this.rooms = new ArrayList<>();
     }
 
+    public String getName() { return name; }
+    public String getLocation() { return location; }
+    public List<Room> getRooms() { return rooms; }
+
     public void addRoom(Room room) {
         rooms.add(room);
     }
-
-    // TODO: getter and setter methods
 }

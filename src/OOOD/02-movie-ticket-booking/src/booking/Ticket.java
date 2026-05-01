@@ -1,3 +1,5 @@
+package booking;
+
 import java.math.BigDecimal;
 
 public class Ticket {
@@ -11,5 +13,7 @@ public class Ticket {
         this.price = price;
     }
 
-    // TODO: getter and setter methods
+    public Screening getScreening() { return screening; }
+    public Seat getSeat() { return seat; }
+    public BigDecimal getPrice() { return price; }
 }

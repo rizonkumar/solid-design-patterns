@@ -1,3 +1,5 @@
+package booking;
+
 import java.time.Duration;
 
 public class Movie {
@@ -11,9 +13,11 @@ public class Movie {
         this.durationInMinutes = durationInMinutes;
     }
 
+    public String getTitle() { return title; }
+    public String getGenre() { return genre; }
+    public int getDurationInMinutes() { return durationInMinutes; }
+
     public Duration getDuration() {
         return Duration.ofMinutes(durationInMinutes);
     }
-
-    // TODO: getter methods
 }

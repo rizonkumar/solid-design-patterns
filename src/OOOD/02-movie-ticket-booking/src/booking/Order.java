@@ -1,3 +1,5 @@
+package booking;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -16,10 +18,10 @@ public class Order {
         tickets.add(ticket);
     }
 
-    // Calculates the total price of all tickets in the order
     public BigDecimal calculateTotalPrice() {
         return tickets.stream().map(Ticket::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    // TODO: getter and setter methods
+    public List<Ticket> getTickets() { return tickets; }
+    public LocalDateTime getOrderDate() { return orderDate; }
 }

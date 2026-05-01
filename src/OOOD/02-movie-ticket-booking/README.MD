@@ -179,6 +179,24 @@ Below is the class diagram of our movie ticket booking system.
 
 In this section, we’ll implement the core functionalities of the movie ticket booking system, focusing on key areas such as handling cinema and movie listings, scheduling screenings, managing seat selection and availability, and processing ticket bookings through an order system.
 
+### System Data Flow
+
+The end-to-end data flow for booking a movie ticket revolves around searching for a movie, selecting a seat, and placing an order:
+
+1. **Movie & Cinema Setup**: 
+   - A `Movie` is added to the system along with a `Cinema` and its `Room`.
+   - The `Room` generates a `Layout` which automatically populates a grid of `Seat` objects based on rows and columns.
+2. **Screening Scheduling**: 
+   - A `Screening` is scheduled connecting the `Movie` and the `Room` for a specific start and end time.
+   - The `Screening` is registered via the `ScreeningManager.addScreening()`.
+3. **Seat Selection & Ticket Booking**: 
+   - A customer retrieves the list of available seats from `ScreeningManager.getAvailableSeats(Screening)`.
+   - The customer selects a `Seat`. The cost is dynamically pulled using the seat's `PricingStrategy` (e.g. `NormalRate`, `VIPRate`).
+   - `MovieBookingSystem.bookTicket()` generates a `Ticket` locking in the seat, screening, and calculated price.
+4. **Order Processing**:
+   - The generated `Ticket` is added to an `Order`. 
+   - `Order.calculateTotalPrice()` sums up the prices of all tickets in the cart.
+
 ### Movie
 
 The `Movie` class represents the static details of a film, such as its title, genre, and duration, which remain consistent across all screenings. The class is designed to be immutable, as it does not include setter methods, ensuring that movie details cannot be altered once the object is created. This immutability guarantees data integrity and reflects the static nature of a movie’s attributes.

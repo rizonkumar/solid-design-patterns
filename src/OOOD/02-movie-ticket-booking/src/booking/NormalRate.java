@@ -1,3 +1,5 @@
+package booking;
+
 import java.math.BigDecimal;
 
 public class NormalRate implements PricingStrategy {
@@ -12,4 +14,3 @@ public class NormalRate implements PricingStrategy {
         return price;
     }
 }
-
