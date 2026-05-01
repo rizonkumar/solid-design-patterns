@@ -79,7 +79,7 @@ The `Movie` class captures essential details about a specific movie in the syste
 
 Below is the UML diagram for the `Movie` class.
 
-![Movie Class Diagram](./assets/movie.png)
+![Movie Class Diagram](./assets/movie.svg)
 
 **Design choice:** We designed the `Movie` class to be a standalone entity, independent of cinema-specific or scheduling contexts. This isolation allows the same `Movie` to be reused across multiple cinemas and screenings without data duplication.
 
@@ -93,7 +93,7 @@ The strategy pattern benefits the system in two key ways:
 
 The UML diagram below illustrates this structure.
 
-![Seat and PricingStrategy Design](./assets/seat_pricing_strategy.png)
+![Seat and PricingStrategy Design](./assets/seat_pricing_strategy.svg)
 
 **Alternate approach:** We could embed pricing logic directly in `Seat`, but this reduces flexibility if pricing rules change. The strategy pattern, while more complex, supports future extensions.
 
@@ -107,7 +107,7 @@ It also maintains an index (`Map<String, Seat>`) to locate seats by their seat n
 
 The UML diagram below illustrates this structure.
 
-![Layout Class Diagram](./assets/layout.png)
+![Layout Class Diagram](./assets/layout.svg)
 
 **Alternative approach:** In `Layout`, we use a nested map (`Map<Integer, Map<Integer, Seat>>`) for seat arrangement instead of a 2D array. This allows dynamic row creation with `computeIfAbsent` and supports variable row sizes. A 2D array for `Layout` could work for fixed-size rooms but lacks flexibility for irregular layouts or dynamic additions.
 
@@ -121,7 +121,7 @@ Together, these classes form a model of a cinema, with `Cinema` managing locatio
 
 Below are the representations of these classes.
 
-![Cinema and Room Class Diagram](./assets/cinema_room.png)
+![Cinema and Room Class Diagram](./assets/cinema_room.svg)
 
 **Design choice:** We structured the `Cinema` and `Room` with a compositional relationship to simulate a real-world cinema with multiple screening rooms. This design allows each `Room` to operate independently with its layout and schedule, while the `Cinema` provides a unified context.
 
@@ -129,7 +129,7 @@ Below are the representations of these classes.
 
 With the cinema structure in place, the `Screening` class defines a specific showing of a movie in a particular room at a scheduled time. It combines a `Movie`, a `Room`, and time details into a single entity.
 
-![Screening Class Diagram](./assets/screening.png)
+![Screening Class Diagram](./assets/screening.svg)
 
 **Design choice:** The `Screening` class centralizes scheduling details, making it easier to manage showtimes across cinemas. It ensures a clear separation of concerns and simplifies schedule management.
 
@@ -139,13 +139,13 @@ The `Ticket` class represents a purchased seat for a specific `Screening`, combi
 
 It includes a price attribute, capturing the seat’s cost at the time of purchase. This design, despite the `Seat` class using a strategy pattern for pricing, ensures the ticket price remains fixed, independent of any future changes to the seat’s pricing strategy.
 
-![Ticket Class Diagram](./assets/ticket.png)
+![Ticket Class Diagram](./assets/ticket.svg)
 
 ### Order
 
 The `Order` class groups multiple tickets into a single transaction, capturing all tickets purchased together at a specific time. It tracks the order’s timestamp and provides the total cost of the tickets.
 
-![Order Class Diagram](./assets/order.png)
+![Order Class Diagram](./assets/order.svg)
 
 ### ScreeningManager
 
@@ -153,7 +153,7 @@ Modeling classes like `Movie`, `Seat`, and `Ticket` alone does not create a comp
 
 The following UML diagram shows the `ScreeningManager` structure.
 
-![Screening Manager Class Diagram](./assets/screening_manager.png)
+![Screening Manager Class Diagram](./assets/screening_manager.svg)
 
 **Design choice:** The `ScreeningManager` class serves as a central coordinator for screening and ticket-related operations. An alternative could be to embed these operations in the `Cinema` class, with each cinema managing its screenings and tickets. However, this would couple the static cinema attributes (e.g., location and rooms) with the logic for scheduling and booking, reducing the system's modularity and maintainability.
 
@@ -165,7 +165,7 @@ Through `MovieBookingSystem`, key operations, such as adding movies or cinemas, 
 
 Here is the representation of this class.
 
-![Movie Booking System Class Diagram](./assets/movie_booking_system.png)
+![Movie Booking System Class Diagram](./assets/movie_booking_system.svg)
 
 **Alternate approach:** We designed the `MovieBookingSystem` class as a facade to provide a simplified interface for client code. An alternative could be to allow client code to directly interact with classes like `ScreeningManager` or `Cinema`. However, this would increase coupling between clients and internal components, potentially leading to fragile and error-prone interactions. The facade pattern enhances maintainability and simplifies system interactions.
 
@@ -173,7 +173,7 @@ Here is the representation of this class.
 
 Below is the class diagram of our movie ticket booking system.
 
-![Complete Class Diagram](./assets/complete_class_diagram.png)
+![Complete Class Diagram](./assets/complete_class_diagram.svg)
 
 ## Code - Movie Ticket Booking System
 
