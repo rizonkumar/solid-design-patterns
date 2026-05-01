@@ -12,3 +12,4 @@ public class NormalRate implements PricingStrategy {
         return price;
     }
 }
+
