@@ -731,6 +731,20 @@ private boolean isSeatBooked(Screening screening, Seat seat) {
 
 This implementation is lightweight and suitable when race conditions are infrequent, but it may require users to retry if a booking fails due to a conflict.
 
+#### Design Choice: Why are Optimistic and Pessimistic Locking logic separated?
+
+You might wonder why **Optimistic Locking** is baked directly into the `ScreeningManager` class, while **Pessimistic Locking** gets its own dedicated `SeatLockManager` class. This is a deliberate design choice rooted in **SOLID principles**, specifically the **Single Responsibility Principle (SRP)**:
+
+1. **Different Lifecycles**: 
+   - **Optimistic Locking** happens at the *exact moment of purchase*. The `ScreeningManager` is already responsible for saving finalized tickets, so a quick *"is it already booked?"* check right before saving naturally belongs there.
+   - **Pessimistic Locking** happens *before* a purchase (when a seat is added to a cart). It involves managing temporary state—tracking users, managing 5-minute countdown timers, and cleaning up expired locks.
+
+2. **Single Responsibility Principle (SRP)**: 
+   If we put all the pessimistic locking logic (timers, user IDs, concurrent hash maps, expiration cleanup loops) inside the `ScreeningManager`, the class would become bloated. `ScreeningManager` should only care about *managing finalized screenings and tickets*, not babysitting temporary shopping carts and timers.
+
+3. **Scalability & Extensibility (Open-Closed Principle)**: 
+   In a massive real-world system (like BookMyShow), pessimistic locks aren't kept in Java memory; they are stored in a distributed cache like **Redis** so that multiple servers can share the locks. By keeping `SeatLockManager` in its own separate class, we can easily rewrite it later to connect to a Redis database *without ever having to touch or break the core `ScreeningManager` code*.
+
 ## Wrap Up
 
 In this chapter, we gathered requirements for the Movie Ticket Booking System through a series of thoughtful questions and answers. We then identified the core objects involved, designed the class structure, and implemented the key components of the system.
