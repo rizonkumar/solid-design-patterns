@@ -182,7 +182,29 @@ Having built our classes, from the hierarchical `File` structure to the intricat
 
 ## Code - Unix File Search
 
-_(Implementation details to be provided in the Java files)_
+In this section, we implement the core functionality of the Unix File Search system.
+
+### System Data Flow
+
+The end-to-end data flow for searching a file is structured to cleanly separate the definition of search criteria from the traversal of the filesystem:
+
+1. **Criteria Definition**:
+   - The user defines one or more `SimplePredicate` objects. Each predicate targets a specific `FileAttribute` (like `SIZE` or `FILENAME`) and uses a `ComparisonOperator` (like `GreaterThanOperator` or `RegexMatchOperator`).
+   - If multiple conditions are needed, the simple predicates are combined using `CompositePredicate` implementations (`AndPredicate`, `OrPredicate`, `NotPredicate`), forming an evaluation tree.
+   - The root of this predicate tree is passed into a `FileSearchCriteria` object, acting as a single entry point for evaluation.
+
+2. **Filesystem Traversal**:
+   - A `FileSearch` instance is created and the `search(rootFile, criteria)` method is invoked.
+   - The `search` method initiates an iterative Depth-First Search (DFS) using a stack (`ArrayDeque`), starting with the `rootFile`.
+   
+3. **Evaluation and Results**:
+   - As each `File` is popped from the traversal stack, `FileSearch` calls `criteria.isMatch(file)`.
+   - The `FileSearchCriteria` delegates the call to the root `Predicate`, which recursively evaluates the file against all configured conditions.
+   - If the predicate tree evaluates to `true`, the `File` is added to the results list.
+   - Any child entries (sub-directories and files) of the current `File` are pushed onto the stack to be evaluated next.
+   - Once the stack is empty, the complete list of matching files is returned.
+
+_(Implementation details are available in the Java files in the `src/search` directory)_
 
 ## Deep Dive Topic
 
