@@ -1,5 +1,11 @@
 package vending;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 class VendingMachine {
     // Stores the history of all completed transactions
     private final List<Transaction> transactionHistory;
@@ -7,14 +13,11 @@ class VendingMachine {
     private final InventoryManager inventoryManager;
     // Handles all payment-related operations
     private final PaymentProcessor paymentProcessor;
-    // Represents the current state of the vending machine
-    private final VendingMachineState currentState;
-    // Tracks the current balance in the machine
-    private final double balance;
-    // Stores the currently selected product code
-    private final String selectedProduct;
+
     // Tracks the current ongoing transaction
     private Transaction currentTransaction;
+    // Represents the current state of the vending machine
+    private VendingMachineState currentState;
 
     public VendingMachine() {
         transactionHistory = new ArrayList<>();
@@ -22,18 +25,38 @@ class VendingMachine {
         inventoryManager = new InventoryManager();
         paymentProcessor = new PaymentProcessor();
         this.currentState = new NoMoneyInsertedState();
-        this.balance = 0.0;
-        this.selectedProduct = null;
+    }
+    
+    // Updates the state of the machine
+    public void setState(VendingMachineState state) {
+        this.currentState = state;
+    }
+
+    // STATE PATTERN OPERATIONS
+    public void insertMoneyState(double amount) throws InvalidStateException {
+        currentState.insertMoney(this, amount);
+    }
+    
+    public void selectProductState(String rackId) throws InvalidStateException, InvalidTransactionException {
+        currentState.selectProductByCode(this, rackId);
+    }
+    
+    public void dispenseProductState() throws InvalidStateException, InvalidTransactionException {
+        currentState.dispenseProduct(this);
+    }
+    
+    public String getCurrentStateDescription() {
+        return currentState.getStateDescription();
+    }
+
+    // INTERNAL STATE ACTIONS CALLED BY STATE CLASSES
+    void addBalance(double amount) {
+        paymentProcessor.addBalance(BigDecimal.valueOf(amount));
     }
 
     // Updates the rack configuration with new product racks
     void setRack(Map<String, Rack> rack) {
         inventoryManager.updateRack(rack);
-    }
-
-    // Adds money to the payment processor
-    void insertMoney(final BigDecimal amount) {
-        paymentProcessor.addBalance(amount);
     }
 
     // Selects a product from a specific rack
@@ -69,14 +92,16 @@ class VendingMachine {
     // Validates the current transaction for product availability and sufficient funds
     private void validateTransaction() throws InvalidTransactionException {
         if (currentTransaction.getProduct() == null) {
-            throw new InvalidTransactionException("Invalid product selection");
-        } else if (currentTransaction.getRack().getProductCount() == 0) {
+            throw new InvalidTransactionException("Invalid product selection. Product is null.");
+        } else if (currentTransaction.getRack() == null || currentTransaction.getRack().getProductCount() == 0) {
             throw new InvalidTransactionException("Insufficient inventory for product.");
         } else if (paymentProcessor
-                .getCurrentBalance()
-                .compareTo(currentTransaction.getProduct().getUnitPrice())
+                        .getCurrentBalance()
+                        .compareTo(currentTransaction.getProduct().getUnitPrice())
                 < 0) {
-            throw new InvalidTransactionException("Insufficient fund");
+            throw new InvalidTransactionException("Insufficient funds. Inserted: " 
+                + paymentProcessor.getCurrentBalance() + " Cost: " 
+                + currentTransaction.getProduct().getUnitPrice());
         }
     }
 
@@ -88,12 +113,17 @@ class VendingMachine {
     // Cancels the current transaction and returns any inserted money
     public void cancelTransaction() {
         paymentProcessor.returnChange();
-        currentTransaction =
-                new Transaction(); // Reset the current transaction for the next purchase.
+        currentTransaction = new Transaction(); // Reset the current transaction for the next purchase.
+        this.currentState = new NoMoneyInsertedState();
     }
 
     // Returns the inventory manager instance
     public InventoryManager getInventoryManager() {
         return inventoryManager;
+    }
+    
+    // Returns the payment processor instance
+    public PaymentProcessor getPaymentProcessor() {
+        return paymentProcessor;
     }
 }

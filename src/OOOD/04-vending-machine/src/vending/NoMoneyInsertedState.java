@@ -10,8 +10,7 @@ public class NoMoneyInsertedState implements VendingMachineState {
 
     // Throws exception as product selection is not allowed without money
     @Override
-    public void selectProductByCode(VendingMachine VM, String productCode)
-            throws InvalidStateException {
+    public void selectProductByCode(VendingMachine VM, String productCode) throws InvalidStateException {
         throw new InvalidStateException("Cannot select a product without inserting money.");
     }
 
