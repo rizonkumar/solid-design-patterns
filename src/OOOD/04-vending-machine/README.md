@@ -171,7 +171,39 @@ Below is the complete class diagram of our vending machine system:
 
 ## Code - Vending Machine
 
-_(Implementation details to be provided in the Java files)_
+In this section, we implement the core functionalities of the vending machine system. 
+
+### System Data Flow
+
+The end-to-end data flow for a Vending Machine transaction is orchestrated by the `VendingMachine` facade class, which delegates specific responsibilities to its subsystems. The process enforces a strict sequence of tasks through the State Pattern:
+
+1. **Initialization (`NoMoneyInsertedState`):**
+   - The `VendingMachine` starts in the `NoMoneyInsertedState`.
+   - The admin configures the machine by supplying a `Map<String, Rack>`, which the `InventoryManager` stores. Each `Rack` tracks a `Product` and its inventory `count`.
+   
+2. **Payment Insertion (`MoneyInsertedState`):**
+   - The user calls `insertMoneyState(amount)`.
+   - The current state transitions the machine to `MoneyInsertedState` and delegates the monetary value to the `PaymentProcessor`.
+   - The `PaymentProcessor` increments its `currentBalance`.
+
+3. **Product Selection (`DispenseState`):**
+   - The user calls `selectProductState(rackId)`.
+   - The `VendingMachine` delegates to the `InventoryManager` to retrieve the `Product` and `Rack` associated with the `rackId`.
+   - A `Transaction` object is populated with the selected `Product` and `Rack`.
+   - The state transitions to `DispenseState`.
+
+4. **Validation and Dispensing (Confirming Transaction):**
+   - The user (or system) triggers `dispenseProductState()`, which invokes `confirmTransaction()`.
+   - **Validation:** The system checks if a product was selected, if the rack has inventory (`productCount > 0`), and if the `PaymentProcessor` balance is sufficient. If any check fails, an `InvalidTransactionException` is thrown.
+   - **Charge:** `PaymentProcessor.charge(unitPrice)` deducts the cost from the balance.
+   - **Dispense:** `InventoryManager.dispenseProductFromRack(rack)` reduces the inventory count by 1.
+   - **Change:** `PaymentProcessor.returnChange()` zeroes out the balance and returns the remaining amount, which is logged into the `Transaction.totalAmount`.
+   
+5. **Completion:**
+   - The completed `Transaction` is stored in the `transactionHistory`.
+   - The `VendingMachine` resets its `currentTransaction` and transitions back to `NoMoneyInsertedState`, ready for the next customer.
+
+_(Implementation details are available in the Java files in the `src/vending` directory)_
 
 ## Deep Dive Topics
 
