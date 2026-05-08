@@ -33,6 +33,7 @@
                                 <source>src/OOOD/02-movie-ticket-booking/src</source>
                                 <source>src/OOOD/03-unix-file-search-system/src</source>
                                 <source>src/OOOD/04-vending-machine/src</source>
+                                <source>src/OOOD/05-elevator-system/src</source>
                                 <!-- You can add other directories here later -->
                             </sources>
                         </configuration>
