@@ -27,6 +27,13 @@ public class BlackJackGame {
 
     // Find the next player who can take an action
     public Player getNextEligiblePlayer() {
+        // If current player hasn't stood or bust, they can continue their turn
+        if (currentPlayer != null
+                && !Action.STAND.equals(playerTurnStatusMap.get(currentPlayer))
+                && !currentPlayer.isBust()) {
+            return currentPlayer;
+        }
+
         // No current player: find first eligible player from the start
         if (currentPlayer == null) {
             for (Player player : players) {
@@ -67,6 +74,8 @@ public class BlackJackGame {
             performPlayerAction(nextPlayer);
             
             // Re-evaluate game end condition after action
+            checkGameEndCondition();
+        } else {
             checkGameEndCondition();
         }
     }
