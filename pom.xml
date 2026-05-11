@@ -35,6 +35,7 @@
                                 <source>src/OOOD/04-vending-machine/src</source>
                                 <source>src/OOOD/05-elevator-system/src</source>
                                 <source>src/OOOD/06-grocery-store-system/src</source>
+                                <source>src/OOOD/07-tic-tac-toe/src</source>
                                 <!-- You can add other directories here later -->
                             </sources>
                         </configuration>
