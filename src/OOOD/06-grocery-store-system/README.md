@@ -168,16 +168,37 @@ In this section, we’ll implement the core functionality of the grocery store s
 
 ### System Data Flow
 
-The operations of the system revolve around the checkout process driven by `GroceryStoreSystem` facade and its `Checkout` engine:
+The operations of the system revolve around the checkout process driven by the `GroceryStoreSystem` facade and its underlying components. Here is how data flows through each core object from initialization to transaction completion:
 
-1. **Setup & Initialization:** `GroceryStoreSystem` initializes empty `Catalog`, `Inventory`, and `Checkout` instances. Admins populate the system by calling `addOrUpdateItem()`, `updateInventory()`, and `addDiscountCampaign()`.
-2. **Checkout Start:** A cashier starts a new customer transaction by calling `Checkout.startNewOrder()`, which creates an empty `Order` object.
-3. **Item Scanning:** As items are scanned, the cashier calls `addItemToOrder(item, quantity)`.
-   - An `OrderItem` is created containing the unit cost and total un-discounted price.
-   - The system iterates over `activeDiscounts` checking applicability using the Strategy Pattern (`isApplicable(item)` via `CategoryBasedCriteria` or `ItemBasedCriteria`).
-   - If multiple discounts apply, it compares them via `calculatePriceWithDiscount(discount)` and registers the best one to the `Order.appliedDiscounts` map.
-4. **Calculations:** Calling `getOrderTotal()` calculates the subtotal by streaming `items` and checking `appliedDiscounts`. The total gets returned for the cashier.
-5. **Finalization:** The cashier accepts payment via `processPayment(paymentAmount)`, which subtracts the total and registers the change returned. `getReceipt().printReceipt()` formats all objects into the customer receipt string.
+1. **Initialization (`Catalog` & `Inventory`):** 
+   - The `GroceryStoreSystem` starts by creating an empty `Catalog` and `Inventory`. 
+   - Store admins populate the `Catalog` by registering `Item` objects (which hold static data like name, category, and unit price).
+   - Shipment handlers call `updateInventory()`, which increases stock levels for specific barcodes inside the `Inventory` object.
+   - Admins define promotions by creating `DiscountCampaign` objects, combining a `DiscountCriteria` (e.g., category-based) and a `DiscountCalculationStrategy` (e.g., percentage-based). These are saved as active campaigns in the system.
+
+2. **Checkout Initiation (`Checkout` & `Order`):** 
+   - A cashier starts a new transaction. The `GroceryStoreSystem` retrieves its `Checkout` module and calls `startNewOrder()`. 
+   - The `Checkout` creates a new, empty `Order` object uniquely identified by a UUID.
+
+3. **Scanning Items (`OrderItem` & `DiscountCampaign`):** 
+   - The cashier scans items. `Checkout` delegates this to `addItemToOrder(item, quantity)`.
+   - An `OrderItem` is instantiated, calculating the baseline price (`item.price * quantity`).
+   - The `Checkout` engine loops through all active `DiscountCampaign` objects to test applicability using the polymorphic `isApplicable(item)` method.
+   - If multiple campaigns apply to a single `OrderItem`, the `Checkout` class evaluates each one by calling `calculatePriceWithDiscount()`. It selects the campaign that gives the highest discount and logs it inside the `Order.appliedDiscounts` mapping.
+   - Note: The `Inventory` module would process `reduceStock()` for each added item to decrement stock once checkout finalizes.
+
+4. **Order Calculation (`Order`):** 
+   - When the cashier is ready to bill, `getOrderTotal()` is invoked. 
+   - The `Order` object streams through all of its `OrderItem` instances. If an item exists in the `appliedDiscounts` map, it computes the discounted price. Otherwise, it calculates the raw subtotal price. All item totals are summed into the final billing amount.
+
+5. **Payment Processing (`Checkout`):** 
+   - The cashier accepts customer cash and triggers `processPayment(paymentAmount)`.
+   - The `Checkout` engine registers the customer's payment amount in the `Order` object and computes the change `paymentAmount.subtract(total)`.
+
+6. **Receipt Generation (`Receipt`):** 
+   - Finally, `getReceipt()` is called to construct a new `Receipt` object passing the active `Order`. 
+   - The `Receipt` iterates over the `Order` items and formats the quantities, unit prices, applied discounts (highlighting campaign names), subtotal, total, and generated change into a printable string. 
+   - The transaction is now complete and the `Checkout` engine is ready for a new order.
 
 *(Implementation details are available in the Java files in the `src/grocery` directory)*
 

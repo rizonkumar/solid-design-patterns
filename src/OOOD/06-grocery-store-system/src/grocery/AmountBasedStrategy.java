@@ -11,7 +11,6 @@ public class AmountBasedStrategy implements DiscountCalculationStrategy {
     
     @Override
     public BigDecimal calculateDiscountedPrice(BigDecimal originalPrice) {
-        BigDecimal result = originalPrice.subtract(discountAmount);
-        return result.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : result;
+        return originalPrice.subtract(discountAmount).max(BigDecimal.ZERO);
     }
 }
