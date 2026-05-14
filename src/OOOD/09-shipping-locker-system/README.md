@@ -4,7 +4,7 @@ In this chapter, we will design a Shipping Locker system similar to UPS, FedEx, 
 
 To realize this vision of a convenient and secure locker system, let’s explore what it needs to do.
 
-![Shipping Locker System](./assets/shipping_locker_system.png)
+![Shipping Locker System](./assets/shipping_locker_system.svg)
 
 ## Requirements Gathering
 
@@ -87,6 +87,7 @@ The `LockerSize` enum represents the predefined sizes of lockers available in th
 The `Site` class models a physical location containing a collection of lockers, organized by their size.
 
 Key functionalities include:
+
 - `Locker findAvailableLocker(LockerSize size)`: This method searches for an empty locker that matches the exact size you need, like "small," "medium," or "large."
 - `Locker placePackage(ShippingPackage pkg, Date date)`: This method takes a package, finds it a locker that fits, and locks it inside. It also keeps track of when the package was placed there and updates the package’s status.
 
@@ -139,6 +140,8 @@ The `LockerManager` class is responsible for managing package storage and retrie
 - `Map<String, Account> accounts`: Maintains a mapping of account IDs to user accounts for managing locker usage and charges.
 - `Map<String, Locker> accessCodeMap`: Maintains a mapping of access codes to lockers, allowing for quick retrieval during package pick-up.
 
+![LockerManager Class](./assets/locker_manager_class.svg)
+
 > **Design Choice:** The `LockerManager` class is designed as a facade to simplify interactions between core objects, providing a single point of control for package assignment and retrieval.
 
 ### Complete Class Diagram
@@ -151,12 +154,12 @@ Below is the complete class diagram of the shipping locker service:
 
 The operations of the system revolve around package drop-offs, assignment tracking, and pickups driven by the `LockerManager` facade and its underlying components. Here is how data flows through each core object:
 
-1. **Initialization (`Site`, `LockerSize`, `LockerFactory`):** 
+1. **Initialization (`Site`, `LockerSize`, `LockerFactory`):**
    - A `Site` is instantiated with a configuration map denoting how many `Locker` instances to create for each `LockerSize`.
    - The `Site` dynamically asks `LockerFactory.createLocker(LockerSize)` to generate each `Locker` instance and categorizes them in its internal hash map.
    - Customers are modeled via `Account` and their rules are dictated by `AccountLockerPolicy`.
 
-2. **Package Delivery (`LockerManager` & `BasicShippingPackage`):** 
+2. **Package Delivery (`LockerManager` & `BasicShippingPackage`):**
    - Delivery personnel trigger `LockerManager.assignPackage(pkg, date)`.
    - A `BasicShippingPackage` is analyzed through `getLockerSize()` to find the absolute minimum bounding box that matches the package dimensions.
    - The `LockerManager` requests `site.placePackage(pkg)`, which looks into the map for an available `Locker`.
@@ -166,15 +169,15 @@ The operations of the system revolve around package drop-offs, assignment tracki
    - Utilizing the **Observer Pattern**, the `LockerManager` doesn't directly text the user. Instead, it delegates to `LockerManagerChange.notifyObservers()`.
    - Subscribed systems (like `EmailNotification` implementing `LockerEventObserver`) receive the notification and securely email the user their location and access code.
 
-4. **Package Pickup (`LockerManager`, `Locker`):** 
+4. **Package Pickup (`LockerManager`, `Locker`):**
    - A customer arrives and provides an access code to `LockerManager.pickUpPackage(accessCode)`.
    - `LockerManager` queries the `accessCodeMap`. If found, it checks `Locker.checkAccessCode()`.
    - The `Locker` analyzes its usage through `calculateStorageCharges()` by comparing the `assignmentDate` to the customer's `AccountLockerPolicy`.
-   - Free periods are respected. Storage past the limits is billed and charged to `Account.addUsageCharge()`. 
+   - Free periods are respected. Storage past the limits is billed and charged to `Account.addUsageCharge()`.
    - If the package is past the max limits, it throws a `MaximumStoragePeriodExceededException`.
    - The `Locker` calls `releaseLocker()` cleaning its variables, making it available for a new package.
 
-*(Implementation details are available in the Java files in the `src/locker` directory)*
+_(Implementation details are available in the Java files in the `src/locker` directory)_
 
 ## Deep Dive Topic
 
@@ -185,6 +188,7 @@ Currently, lockers are created directly based on predefined sizes, which makes t
 To address this, we can use the **Factory design pattern** to centralize the creation logic for different types of lockers, making the system more modular and extensible.
 
 Here’s how a `LockerFactory` class enhances the locker system:
+
 - **Centralized object creation**: The `LockerFactory` encapsulates the locker instantiation process, so any changes to locker creation (e.g., adding new sizes or types) are localized to this class.
 - **Extensibility**: If we need to add new locker sizes or types in the future, the factory class can be easily updated, without modifying core business logic in other parts of the system.
 - **Improved readability and maintainability**: Using a factory method to create lockers allows us to separate locker creation from locker usage logic, aligning with the Single Responsibility Principle.
