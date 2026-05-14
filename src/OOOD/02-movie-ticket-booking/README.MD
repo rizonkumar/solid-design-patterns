@@ -88,6 +88,7 @@ Below is the UML diagram for the `Movie` class.
 The `Seat` class holds key details about an individual seat, including its unique number. It uses the strategy pattern, implemented through the `PricingStrategy` interface with concrete classes like `NormalRate`, `PremiumRate`, and `VIPRate`, to manage price calculation flexibly.
 
 The strategy pattern benefits the system in two key ways:
+
 - It promotes extensibility, making it easy to add new rate classes.
 - It reduces code redundancy by using a single `Seat` class for all pricing variations.
 
@@ -183,18 +184,18 @@ In this section, we’ll implement the core functionalities of the movie ticket 
 
 The end-to-end data flow for booking a movie ticket revolves around searching for a movie, selecting a seat, and placing an order:
 
-1. **Movie & Cinema Setup**: 
+1. **Movie & Cinema Setup**:
    - A `Movie` is added to the system along with a `Cinema` and its `Room`.
    - The `Room` generates a `Layout` which automatically populates a grid of `Seat` objects based on rows and columns.
-2. **Screening Scheduling**: 
+2. **Screening Scheduling**:
    - A `Screening` is scheduled connecting the `Movie` and the `Room` for a specific start and end time.
    - The `Screening` is registered via the `ScreeningManager.addScreening()`.
-3. **Seat Selection & Ticket Booking**: 
+3. **Seat Selection & Ticket Booking**:
    - A customer retrieves the list of available seats from `ScreeningManager.getAvailableSeats(Screening)`.
    - The customer selects a `Seat`. The cost is dynamically pulled using the seat's `PricingStrategy` (e.g. `NormalRate`, `VIPRate`).
    - `MovieBookingSystem.bookTicket()` generates a `Ticket` locking in the seat, screening, and calculated price.
 4. **Order Processing**:
-   - The generated `Ticket` is added to an `Order`. 
+   - The generated `Ticket` is added to an `Order`.
    - `Order.calculateTotalPrice()` sums up the prices of all tickets in the cart.
 
 ### Movie
@@ -735,15 +736,15 @@ This implementation is lightweight and suitable when race conditions are infrequ
 
 You might wonder why **Optimistic Locking** is baked directly into the `ScreeningManager` class, while **Pessimistic Locking** gets its own dedicated `SeatLockManager` class. This is a deliberate design choice rooted in **SOLID principles**, specifically the **Single Responsibility Principle (SRP)**:
 
-1. **Different Lifecycles**: 
-   - **Optimistic Locking** happens at the *exact moment of purchase*. The `ScreeningManager` is already responsible for saving finalized tickets, so a quick *"is it already booked?"* check right before saving naturally belongs there.
-   - **Pessimistic Locking** happens *before* a purchase (when a seat is added to a cart). It involves managing temporary state—tracking users, managing 5-minute countdown timers, and cleaning up expired locks.
+1. **Different Lifecycles**:
+   - **Optimistic Locking** happens at the _exact moment of purchase_. The `ScreeningManager` is already responsible for saving finalized tickets, so a quick _"is it already booked?"_ check right before saving naturally belongs there.
+   - **Pessimistic Locking** happens _before_ a purchase (when a seat is added to a cart). It involves managing temporary state—tracking users, managing 5-minute countdown timers, and cleaning up expired locks.
 
-2. **Single Responsibility Principle (SRP)**: 
-   If we put all the pessimistic locking logic (timers, user IDs, concurrent hash maps, expiration cleanup loops) inside the `ScreeningManager`, the class would become bloated. `ScreeningManager` should only care about *managing finalized screenings and tickets*, not babysitting temporary shopping carts and timers.
+2. **Single Responsibility Principle (SRP)**:
+   If we put all the pessimistic locking logic (timers, user IDs, concurrent hash maps, expiration cleanup loops) inside the `ScreeningManager`, the class would become bloated. `ScreeningManager` should only care about _managing finalized screenings and tickets_, not babysitting temporary shopping carts and timers.
 
-3. **Scalability & Extensibility (Open-Closed Principle)**: 
-   In a massive real-world system (like BookMyShow), pessimistic locks aren't kept in Java memory; they are stored in a distributed cache like **Redis** so that multiple servers can share the locks. By keeping `SeatLockManager` in its own separate class, we can easily rewrite it later to connect to a Redis database *without ever having to touch or break the core `ScreeningManager` code*.
+3. **Scalability & Extensibility (Open-Closed Principle)**:
+   In a massive real-world system (like BookMyShow), pessimistic locks aren't kept in Java memory; they are stored in a distributed cache like **Redis** so that multiple servers can share the locks. By keeping `SeatLockManager` in its own separate class, we can easily rewrite it later to connect to a Redis database _without ever having to touch or break the core `ScreeningManager` code_.
 
 ## Wrap Up
 
