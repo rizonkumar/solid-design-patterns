@@ -12,6 +12,7 @@ All source and docs live under **[src/](src/)**. See [src/README.md](src/README.
 | ----------------- | ---------------------------------------------- |
 | High Level Design | [src/HLD/](src/HLD/)                           |
 | Low Level Design  | [src/LLD/](src/LLD/)                           |
+| Object Oriented Design | [src/OOOD/](src/OOOD/)                     |
 | Design patterns   | [src/DesignPatterns/](src/DesignPatterns/)     |
 | SOLID principles  | [src/Principles/SOLID/](src/Principles/SOLID/) |
 | Basics (OOP)      | [src/Basics/](src/Basics/)                     |
