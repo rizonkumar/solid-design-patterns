@@ -1,6 +1,7 @@
 ### The Observer Pattern Solution
 
 The refactored code implements the **Observer Pattern**, a behavioral design pattern that creates a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing. 
+
 ---
 
 ## 1. How the Observer Pattern Solves the Problem
@@ -19,11 +20,11 @@ By introducing a formal subscription mechanism, we decouple the **Subject** (the
 
 ## 2. Key Improvements
 
-* **Dynamic Subscriptions**: Subscribers can be added (`subscribe`) or removed (`unsubscribe`) at **runtime**[cite: 118, 298].
+* **Dynamic Subscriptions**: Subscribers can be added (`subscribe`) or removed (`unsubscribe`) at **runtime**.
 * **Encapsulation**: The `YouTubeChannel` no longer knows specific email addresses or app usernames; it only knows it is talking to a list of `Subscriber` objects.
 * **Adherence to SOLID**: 
-    * **Open/Closed Principle**: The system is open for new types of subscribers but closed for modification in the `YouTubeChannel` class[cite: 141].
-    * **Single Responsibility Principle**: Managing videos and managing notifications are now separate responsibilities[cite: 141].
+    * **Open/Closed Principle**: The system is open for new types of subscribers but closed for modification in the `YouTubeChannel` class.
+    * **Single Responsibility Principle**: Managing videos and managing notifications are now separate responsibilities.
 
 ---
 
@@ -31,10 +32,10 @@ By introducing a formal subscription mechanism, we decouple the **Subject** (the
 
 | Component | Responsibility |
 | :--- | :--- |
-| **Subject Interface** (`Channel`) | Defines the contract for attaching, detaching, and notifying observers[cite: 66, 251]. |
-| **Concrete Subject** (`YouTubeChannel`) | Stores the state of interest and sends notifications to its observers when its state changes[cite: 91, 273]. |
-| **Observer Interface** (`Subscriber`) | Declares the update interface for objects that should be notified of changes in a subject[cite: 117, 297]. |
-| **Concrete Observers** (`EmailSubscriber`, etc.) | Implements the `update` interface to keep its state consistent with the subject's state[cite: 68, 252]. |
+| **Subject Interface** (`Channel`) | Defines the contract for attaching, detaching, and notifying observers. |
+| **Concrete Subject** (`YouTubeChannel`) | Stores the state of interest and sends notifications to its observers when its state changes. |
+| **Observer Interface** (`Subscriber`) | Declares the update interface for objects that should be notified of changes in a subject. |
+| **Concrete Observers** (`EmailSubscriber`, etc.) | Implements the `update` interface to keep its state consistent with the subject's state. |
 
 ---
 

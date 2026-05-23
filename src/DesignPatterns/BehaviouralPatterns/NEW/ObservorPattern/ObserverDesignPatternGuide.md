@@ -1,10 +1,11 @@
-## Event-Driven Communication
+# Observer Pattern: Event-Driven Communication
 
 **Behavioral design patterns** focus on how objects interact and communicate with each other, helping to define the flow of control in a system. These patterns simplify complex communication logic between objects while promoting **loose coupling**.
 
 ---
 
 ## 1. What is the Observer Pattern?
+
 The **Observer Pattern** is a behavioral design pattern that defines a **one-to-many dependency** between objects. When one object (the **subject**) changes its state, all its dependents (called **observers**) are notified and updated automatically.
 
 ### Real-Life Analogy: YouTube Subscriptions
@@ -13,48 +14,47 @@ Think of subscribing to a YouTube channel. Once you hit the **Subscribe** button
 * **The Subscribers**: The Observers.
 * **The Notification**: The automatic update mechanism.
 
-
 ---
 
 ## 2. The Problem: Tight Coupling
-In a naive design, a subject is hard-coded to notify specific recipients. This creates a "maintenance nightmare" because adding or removing a subscriber requires modifying the core logic of the subject. This violates both the **Single Responsibility Principle (SRP)** and the **Open/Closed Principle (OCP)**.
 
+In a naive design, a subject is hard-coded to notify specific recipients. This creates a "maintenance nightmare" because adding or removing a subscriber requires modifying the core logic of the subject. This violates both the **Single Responsibility Principle (SRP)** and the **Open/Closed Principle (OCP)**.
 
 ---
 
-## 3. Class Diagram
-The Observer Pattern uses interfaces to decouple the subject from its concrete observers. The subject only knows about the `Subscriber` interface, not the concrete implementations like `EmailSubscriber` or `MobileAppSubscriber`.
+## 3. Class Diagram & Structural Breakdown
 
+The Observer Pattern uses interfaces to decouple the subject from its concrete observers. The subject only knows about the `Subscriber` interface, not the concrete implementations like `EmailSubscriber` or `MobileAppSubscriber`.
 
 ```mermaid
 classDiagram
     class Channel {
         <<interface>>
-        +subscribe(s: Subscriber) void
-        +unsubscribe(s: Subscriber) void
-        +notifySubscribers(videoTitle: String) void
+        +subscribe(Subscriber s)
+        +unsubscribe(Subscriber s)
+        +notifySubscribers(String videoTitle)
     }
     class YouTubeChannel {
-        -subscribers: List~Subscriber~
-        -channelName: String
-        +uploadVideo(videoTitle: String) void
+        -List~Subscriber~ subscribers
+        -String channelName
+        +uploadVideo(String videoTitle)
     }
     class Subscriber {
         <<interface>>
-        +update(videoTitle: String) void
+        +update(String videoTitle)
     }
     class EmailSubscriber {
-        -email: String
-        +update(videoTitle: String) void
+        -String email
+        +update(String videoTitle)
     }
     class MobileAppSubscriber {
-        -username: String
-        +update(videoTitle: String) void
+        -String username
+        +update(String videoTitle)
     }
 
-    Channel <|.. YouTubeChannel : implements
-    Subscriber <|.. EmailSubscriber : implements
-    Subscriber <|.. MobileAppSubscriber : implements
+    YouTubeChannel ..|> Channel : implements
+    EmailSubscriber ..|> Subscriber : implements
+    MobileAppSubscriber ..|> Subscriber : implements
     YouTubeChannel o-- Subscriber : notifies
 ```
 
@@ -90,7 +90,8 @@ classDiagram
 ---
 
 ## 6. Real-World Examples 
-1.  **UI Event Handling**: Button clicks or typing listeners in GUI frameworks.
-2.  **Stock Market Tickers**: Updating charts and alerts when a stock price changes.
-3.  **File System Watchers**: IDEs triggering compilers when a file is saved.
-4.  **Social Media**: YouTube or Instagram notifying followers of new posts.
+
+1. **UI Event Handling**: Button clicks or typing listeners in GUI frameworks.
+2. **Stock Market Tickers**: Updating charts and alerts when a stock price changes.
+3. **File System Watchers**: IDEs triggering compilers when a file is saved.
+4. **Social Media**: YouTube or Instagram notifying followers of new posts.
