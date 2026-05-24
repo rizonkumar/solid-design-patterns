@@ -43,30 +43,30 @@ The Strategy Pattern replaces rigid conditional gates with clean object composit
 ```mermaid
 classDiagram
     class RideMatchingService {
-        -MatchingStrategy strategy
-        +RideMatchingService(MatchingStrategy strategy)
-        +setStrategy(MatchingStrategy strategy)
-        +matchRider(String location)
+        -strategy: MatchingStrategy
+        +setStrategy(strategy: MatchingStrategy) void
+        +match(location: String) void
     }
     class MatchingStrategy {
         <<interface>>
-        +match(String riderLocation)
-    }
-    class NearestDriverStrategy {
-        +match(String riderLocation)
+        +match(location: String) void
     }
     class AirportQueueStrategy {
-        +match(String riderLocation)
+        +match(location: String) void
+    }
+    class NearestDriverStrategy {
+        +match(location: String) void
     }
     class SurgePriorityStrategy {
-        +match(String riderLocation)
+        +match(location: String) void
     }
 
-    RideMatchingService --> MatchingStrategy : composition
-    NearestDriverStrategy ..|> MatchingStrategy : implements
-    AirportQueueStrategy ..|> MatchingStrategy : implements
-    SurgePriorityStrategy ..|> MatchingStrategy : implements
+    RideMatchingService --> MatchingStrategy
+    AirportQueueStrategy ..|> MatchingStrategy
+    NearestDriverStrategy ..|> MatchingStrategy
+    SurgePriorityStrategy ..|> MatchingStrategy
 ```
+
 
 | Component | Responsibility |
 | :--- | :--- |
