@@ -107,6 +107,7 @@ classDiagram
     LightOffCommand --> Light : HAS-A
     AConCommand --> AC : HAS-A
     ACOffCommand --> AC : HAS-A
+```
 
 ## 5. How the Command Pattern Resolves the Issues
 
