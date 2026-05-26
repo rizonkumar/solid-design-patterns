@@ -1,4 +1,3 @@
-```markdown
 # TemplateMethodDesignPatternGuide.md: Inverted Control & Structural Governance
 
 **Behavioral design patterns** focus on how objects communicate and collaborate with each other to define the flow of control in a system. These patterns aim to simplify complex logic and improve the structure of interactions while promoting loose coupling between objects.
@@ -123,7 +122,3 @@ classDiagram
 1. **TUF+ Payment Flow**: In TUF+, the payment flow for both Indian and International transactions follows a predefined sequence. This sequence includes steps like validating the payment method, processing the payment, and updating the account. While these steps remain the same, the specifics (such as validating a UPI ID for Indian payments or a credit card for international payments) can vary between subclasses, providing flexibility and customization.
 2. **Game Engines**: Game engines like Unity or Unreal Engine use the Template Pattern in their game loop and rendering process. The framework for rendering a frame is common (input handling, physics update, rendering), but specific actions (e.g., rendering techniques or AI decision-making) can be customized in different games through subclassing.
 3. **Web Frameworks**: Frameworks like Spring or Django use the Template Pattern for request lifecycles. They define the rigid pipeline for handling HTTP requests (URL mapping, request parsing, filter chains, formatting) but allow developers to override specific hooks like validation or template engine rendering.
-
-```
-
-```
